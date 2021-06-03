@@ -8,9 +8,13 @@ from nats.aio.client import Client as NATS
 import json
 
 
+ROUTEUR_SUBJECT = os.environ.get("ROUTEUR_SUBJECT", "routing")
+EVENT_DATA_SUBJECT = os.environ.get("EVENT_DATA_SUBJECT", "event_data")
+NATS_URI = os.environ.get("NATS_URI",  "nats://127.0.0.1:4222")
+
+
 async def run(loop):
-    ROUTEUR_SUBJECT = os.environ.get("ROUTEUR_SUBJECT", "routing")
-    EVENT_DATA_SUBJECT = os.environ.get("EVENT_DATA_SUBJECT", "event_data")
+    
     nc = NATS()
 
     async def error_cb(e):
@@ -39,7 +43,7 @@ async def run(loop):
         await nc.publish(EVENT_DATA_SUBJECT, data)
 
     options = {
-        "servers":["nats://nats:4222"],
+        "servers":[NATS_URI],
         "loop": loop,
         "error_cb": error_cb,
         "closed_cb": closed_cb,
