@@ -9,7 +9,7 @@ import json
 
 
 async def run(loop):
-    ROUTEUR_SUBJECT = os.environ.get("ROUTEUR_SUBJECT", "routing")
+    EVENT_DATA_SUBJECT = os.environ.get("EVENT_DATA_SUBJECT", "event_data")
     nc = NATS()
 
     async def error_cb(e):
@@ -29,9 +29,6 @@ async def run(loop):
         data = json.loads(msg.data.decode())
         print("Received a message on '{subject} {reply}': {data}".format(
           subject=subject, reply=reply, data=data))
-        for destinataire in data["destinataires"]:
-            await nc.publish(f"routing.{destinataire}", "contact this force".encode())
-
     options = {
         "servers":["nats://nats:4222"],
         "loop": loop,
@@ -40,23 +37,19 @@ async def run(loop):
         "reconnected_cb": reconnected_cb
     }
 
-    try:
-        await nc.connect(**options)
-    except Exception as e:
-        print(e)
-        show_usage_and_die()
+    await nc.connect(**options)
 
     print(f"Connected to NATS at {nc.connected_url.netloc}...")
-    def signal_handler():
-        if nc.is_closed:
-            return
-        print("Disconnecting...")
-        loop.create_task(nc.close())
+    # def signal_handler():
+    #     if nc.is_closed:
+    #         return
+    #     print("Disconnecting...")
+    #     loop.create_task(nc.close())
 
-    for sig in ('SIGINT', 'SIGTERM'):
-        loop.add_signal_handler(getattr(signal, sig), signal_handler)
+    # for sig in ('SIGINT', 'SIGTERM'):
+    #     loop.add_signal_handler(getattr(signal, sig), signal_handler)
 
-    await nc.subscribe(ROUTEUR_SUBJECT, "", subscribe_handler)
+    await nc.subscribe(EVENT_DATA_SUBJECT, "", subscribe_handler)
 
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()

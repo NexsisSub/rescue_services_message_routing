@@ -31,6 +31,7 @@ services:
     networks: ["nats"]
     env_file: 
       - .env
+
   routeur:
     build: 
       context: routeur
@@ -38,6 +39,15 @@ services:
     networks: ["nats"]
     env_file: 
       - .env
+
+  event-logger:
+    build: 
+      context: event_logger
+      dockerfile: Dockerfile
+    networks: ["nats"]
+    env_file: 
+      - .env
+  
 networks:
   nats:
     name: nats

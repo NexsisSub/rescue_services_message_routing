@@ -3,7 +3,7 @@ from nats.aio.client import Client as NATS
 from fastapi import FastAPI
 import json
 import asyncio
-
+import os
 
 app = FastAPI()
 nc = NATS()
