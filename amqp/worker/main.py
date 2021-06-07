@@ -6,12 +6,18 @@ import os
 import signal
 from nats.aio.client import Client as NATS
 import json
-import elasticsearch 
+
 
 NATS_URI = os.environ.get("NATS_URI",  "nats://127.0.0.1:4222")
-EVENT_DATA_SUBJECT = os.environ.get("EVENT_DATA_SUBJECT", "event_data")
+
 
 async def run(loop):
+    parser = argparse.ArgumentParser()
+
+    # e.g. nats-sub hello -s nats://127.0.0.1:4222
+    parser.add_argument('subject', default='pompiers-77', nargs='?')
+    args = parser.parse_args()
+
     nc = NATS()
 
     async def error_cb(e):
@@ -28,11 +34,11 @@ async def run(loop):
     async def subscribe_handler(msg):
         subject = msg.subject
         reply = msg.reply
-        data = json.loads(msg.data.decode())
+        data = msg.data.decode()
         print("Received a message on '{subject} {reply}': {data}".format(
           subject=subject, reply=reply, data=data))
 
-        res = es.index(index="test-index", id=1, body=doc)
+
     options = {
         "servers":[NATS_URI],
         "loop": loop,
@@ -44,8 +50,16 @@ async def run(loop):
     await nc.connect(**options)
 
     print(f"Connected to NATS at {nc.connected_url.netloc}...")
+    # def signal_handler():
+    #     if nc.is_closed:
+    #         return
+    #     print("Disconnecting...")
+    #     loop.create_task(nc.close())
 
-    await nc.subscribe(EVENT_DATA_SUBJECT, "", subscribe_handler)
+    # for sig in ('SIGINT', 'SIGTERM'):
+    #     loop.add_signal_handler(getattr(signal, sig), signal_handler)
+
+    await nc.subscribe(f"routing.{args.subject}", "", subscribe_handler)
 
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()

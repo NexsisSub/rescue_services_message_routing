@@ -1,0 +1,58 @@
+version: "3.5"
+services:
+  rabbitmq:
+      image: rabbitmq:3-management-alpine
+      container_name: rabbitmq
+      env_file:
+        - .env 
+      ports:
+        - 5672:5672
+        - 15672:15672
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.13.1
+    environment:
+      - node.name=es01
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=es02,es03
+      - cluster.initial_master_nodes=es01,es02,es03
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+    networks: ["nats"]
+  # api:
+  #   build: 
+  #     context: api
+  #     dockerfile: Dockerfile
+  #   ports: 
+  #     - "80:80"
+  #   volumes: 
+  #     - ./api/app:/app
+  #   networks: ["nats"]
+  #   env_file: 
+  #     - .env
+
+  # routeur:
+  #   build: 
+  #     context: routeur
+  #     dockerfile: Dockerfile
+  #   networks: ["nats"]
+  #   env_file: 
+  #     - .env
+
+  # event-logger:
+  #   build: 
+  #     context: event_logger
+  #     dockerfile: Dockerfile
+  #   networks: ["nats"]
+  #   env_file: 
+  #     - .env
+  
+networks:
+  nats:
+    name: nats
