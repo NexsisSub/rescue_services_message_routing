@@ -3,9 +3,9 @@ import asyncio
 from aio_pika import connect, Message, DeliveryMode, ExchangeType
 import os
 
+MAIN_TOPIC = os.environ.get("ROUTEUR_TOPIC", "main")
+MAIN_EXCHANGE = os.environ.get("ROUTEUR_EXCHANGE", "main")
 
-ROUTEUR_TOPIC = os.environ.get("ROUTEUR_TOPIC", "routing")
-ROUTEUR_EXCHANGE = os.environ.get("ROUTEUR_EXCHANGE", "routing")
 
 AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@localhost/")
 
@@ -16,12 +16,10 @@ async def main(loop):
     # Creating a channel
     channel = await connection.channel()
 
-    topic_logs_exchange = await channel.declare_exchange(
-        ROUTEUR_EXCHANGE, ExchangeType.TOPIC
+    main_exchange = await channel.declare_exchange(
+        MAIN_EXCHANGE, ExchangeType.TOPIC
     )
-
-    routing_key = ROUTEUR_TOPIC
-
+    
     message_body = b"Hello World!"
 
     message = Message(
@@ -30,7 +28,7 @@ async def main(loop):
     )
 
     # Sending the message
-    await topic_logs_exchange.publish(message, routing_key=routing_key)
+    await main_exchange.publish(message, routing_key=MAIN_TOPIC)
 
     print(" [x] Sent %r" % message)
 

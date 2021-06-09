@@ -1,1 +1,2 @@
-asyncio-nats-client
+elasticsearch[async]
+aio_pika
