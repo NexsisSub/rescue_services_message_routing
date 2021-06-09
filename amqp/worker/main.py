@@ -1,70 +1,45 @@
-
-
-import argparse, sys
 import asyncio
-import os
-import signal
-from nats.aio.client import Client as NATS
-import json
+import sys
+from aio_pika import connect, IncomingMessage, ExchangeType, Message, DeliveryMode, Exchange
+import os 
+from functools import partial
 
 
-NATS_URI = os.environ.get("NATS_URI",  "nats://127.0.0.1:4222")
+AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@localhost/")
+
+DESTINATAIRE = "pompiers-77"
+PROTOCOL = "cisu"
 
 
-async def run(loop):
-    parser = argparse.ArgumentParser()
-
-    # e.g. nats-sub hello -s nats://127.0.0.1:4222
-    parser.add_argument('subject', default='pompiers-77', nargs='?')
-    args = parser.parse_args()
-
-    nc = NATS()
-
-    async def error_cb(e):
-        print("Error:", e)
-
-    async def closed_cb():
-        print("Connection to NATS is closed.")
-        await asyncio.sleep(0.1, loop=loop)
-        loop.stop()
-
-    async def reconnected_cb():
-        print(f"Connected to NATS at {nc.connected_url.netloc}...")
-
-    async def subscribe_handler(msg):
-        subject = msg.subject
-        reply = msg.reply
-        data = msg.data.decode()
-        print("Received a message on '{subject} {reply}': {data}".format(
-          subject=subject, reply=reply, data=data))
+async def on_message_print(message: IncomingMessage):
+    print(" [x] %r:%r" % (message.routing_key, message.body))
 
 
-    options = {
-        "servers":[NATS_URI],
-        "loop": loop,
-        "error_cb": error_cb,
-        "closed_cb": closed_cb,
-        "reconnected_cb": reconnected_cb
-    }
+async def on_message(message: IncomingMessage):
+    await on_message_print(message)
+    message.ack()
 
-    await nc.connect(**options)
 
-    print(f"Connected to NATS at {nc.connected_url.netloc}...")
-    # def signal_handler():
-    #     if nc.is_closed:
-    #         return
-    #     print("Disconnecting...")
-    #     loop.create_task(nc.close())
+async def main(loop):
+    # Perform connection
+    connection = await connect(AMQP_URI, loop=loop)
 
-    # for sig in ('SIGINT', 'SIGTERM'):
-    #     loop.add_signal_handler(getattr(signal, sig), signal_handler)
+    # Creating a channel
+    channel = await connection.channel()
+    await channel.set_qos(prefetch_count=1)
 
-    await nc.subscribe(f"routing.{args.subject}", "", subscribe_handler)
+    # Declare an exchange
 
-if __name__ == '__main__':
+    queue = await channel.declare_queue(f"routing.{DESTINATAIRE}.{PROTOCOL}", durable=True)
+
+    await queue.consume(on_message)
+
+
+if __name__ == "__main__":
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(run(loop))
-    try:
-        loop.run_forever()
-    finally:
-        loop.close()
+    loop.create_task(main(loop))
+
+    # we enter a never-ending loop that waits for
+    # data and runs callbacks whenever necessary.
+    print(" [*] Waiting for messages. To exit press CTRL+C")
+    loop.run_forever()
