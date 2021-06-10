@@ -1,0 +1,100 @@
+<?xml version="1.0" ?><edxlDistribution xmlns="urn:oasis:names:tc:emergency:EDXL:DE:2.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ct="urn:oasis:names:tc:emergency:edxl:ct:1.0" xlink:type="extended">
+  <distributionID>af0d6e0a-39c4-4b96-9f9c-1a06bab2d1b7</distributionID>
+  <senderID>cga-pompier-sdis77</senderID>
+  <dateTimeSent>2020-11-02T15:52:19+00:00</dateTimeSent>
+  <dateTimeExpires>2070-11-02T15:52:19+00:00</dateTimeExpires>
+  <distributionStatus>Actual</distributionStatus>
+  <distributionKind>Report</distributionKind>
+  <descriptor xlink:type="resource">
+    <language>fr-FR</language>
+    <explicitAddress>
+      <explicitAddressScheme>sge</explicitAddressScheme>
+      <explicitAddressValue>sgc-enki</explicitAddressValue>
+    </explicitAddress>
+  </descriptor>
+  <content xlink:type="resource">
+    <contentObject xlink:type="resource">
+      <contentXML>
+        <embeddedXMLContent>
+          <message xmlns="urn:emergency:cisu:2.0">
+  <messageId>af0d6e0a-39c4-4b96-9f9c-1a06bab2d1b7</messageId>
+  <sender>
+    <name>pompier-sdis77</name>
+    <URI>sge:cga-pompier-sdis77</URI>
+  </sender>
+  <sentAt>2020-11-02T15:52:19+00:00</sentAt>
+  <msgType>ALERT</msgType>
+  <status>ACTUAL</status>
+  <recipients>
+    <recipient>
+      <name>pompiers-77</name>
+      <URI>sge:77-cgo</URI>
+    </recipient>
+    <recipient>
+      <name>sgc-enki</name>
+      <URI>sge:sgc-enki</URI>
+    </recipient>
+  </recipients>
+  <createEvent>
+    <eventId>0cceff71-b3e1-4649-a8cf-d74e7594b5ac</eventId>
+    <createdAt>2020-11-02T15:52:19+00:00</createdAt>
+    <severity>SEVERE</severity>
+    <eventLocation>
+      <loc_Id>111fb03a-6fd9-41e0-8e81-990c45188888</loc_Id>
+      <type>POINT</type>
+      <coordsys>EPSG:4326</coordsys>
+      <height_role>AVE</height_role>
+      <coord>
+        <lat>48.886622</lat>
+        <lon>2.598313</lon>
+      </coord>
+      <address>Chelles</address>
+      <address>Chelles</address>
+      <address>(77108)</address>
+    </eventLocation>
+    <primaryAlert>
+      <alertId>e45f29fa-66b7-4f35-a9e9-a1c541834d68</alertId>
+      <receivedAt>2020-11-02T15:52:10+00:00</receivedAt>
+      <reporting>STANDARD</reporting>
+      <alertLocation>
+        <type>POINT</type>
+        <coordsys>EPSG:4326</coordsys>
+        <coord>
+          <lat>48.886622</lat>
+          <lon>2.598313</lon>
+        </coord>
+        <address>Chelles</address>
+        <address>Chelles</address>
+        <address>(77108)</address>
+      </alertLocation>
+      <call>
+        <source>requérant</source>
+        <dialledURI>tel:112</dialledURI>
+      </call>
+      <caller>
+        <callerURI>tel:+33611223344</callerURI>
+      </caller>
+      <callTaker>
+      </callTaker>
+      <alertCode>
+        <version>latest</version>
+        <whatsHappen>
+          <code>C04.03.00</code>
+          <label>Incendie|Incendie en milieu agricole</label>
+        </whatsHappen>
+        <locationKind>
+          <code>L02.01.00</code>
+          <label>Circulation/transport|Voie publique hors voie rapide</label>
+        </locationKind>
+        <victims>
+          <count>UNKNOWN</count>
+        </victims>
+      </alertCode>
+    </primaryAlert>
+  </createEvent>
+</message>
+        </embeddedXMLContent>
+      </contentXML>
+    </contentObject>
+  </content>
+</edxlDistribution>

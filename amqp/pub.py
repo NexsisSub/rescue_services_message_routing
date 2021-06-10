@@ -18,11 +18,12 @@ async def main(loop):
     main_exchange = await channel.declare_exchange(
         MAIN_EXCHANGE, ExchangeType.DIRECT
     )
-    
-    message_body = b"Hello World!"
 
+    with open("./data/4bc6d047-bf3f-439a-93ed-6f18b64eb579.xml", 'rb') as f : 
+        cisu_message = f.read()
+    
     message = Message(
-        message_body,
+        cisu_message,
         delivery_mode=DeliveryMode.PERSISTENT
     )
 

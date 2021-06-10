@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<edxlDistribution xlink:type="extended"
+                  xmlns="urn:oasis:names:tc:emergency:EDXL:DE:2.0"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                  xmlns:ct="urn:oasis:names:tc:emergency:edxl:ct:1.0">
+
+  <distributionID>21b36a36-717b-4eba-bbc1-8e027624fe2f</distributionID>
+  <senderID>cga-pompier-sdis77</senderID>
+  <dateTimeSent>2020-04-06T12:00:50+00:00</dateTimeSent>
+  <dateTimeExpires>2070-04-06T12:00:50+00:00</dateTimeExpires>
+  <distributionStatus>Actual</distributionStatus>
+  <distributionKind>Report</distributionKind>
+  <descriptor xlink:type="resource">
+    <language>fr-FR</language>
+    <explicitAddress>
+      <explicitAddressScheme>sge</explicitAddressScheme>
+      <explicitAddressValue>cgo-pompier-sdis77</explicitAddressValue>
+      <explicitAddressValue>sgo-police-77</explicitAddressValue>
+    </explicitAddress>
+  </descriptor>
+  <content xlink:type="resource">
+    <contentObject xlink:type="resource">
+      <contentXML>
+        <embeddedXMLContent>
+          <message xmlns="urn:emergency:cisu:2.0">
+  <messageId>111fb03a-6fd9-41e0-8e81-990c45188888</messageId>
+  <sender>
+    <name>nexsis_cga_59</name>
+    <URI>sge:sga_nexsis</URI>
+  </sender>
+  <sentAt>2020-04-06T12:02:00+00:00</sentAt>
+  <msgType>ALERT</msgType>
+  <status>ACTUAL</status>
+  <recipients>
+    <recipient>
+      <name>pompier-sdis77</name>
+      <URI>sge:pompier-sdis77</URI>
+    </recipient>
+    <recipient>
+      <name>police-77</name>
+      <URI>sge:sgo-police-77</URI>
+    </recipient>
+  </recipients>
+  <createEvent>
+    <eventId>111fb03a-6fd9-41e0-8e81-990c45188888</eventId>
+    <createdAt>2020-04-06T12:02:00+00:00</createdAt>
+    <severity>SEVERE</severity>
+    <eventLocation>
+      <loc_Id>111fb03a-6fd9-41e0-8e81-990c45188888</loc_Id>
+      <name>Cave à vin Bordeaux</name>
+      <type>POINT</type>
+      <coord>
+        <lat>48.868893</lat>
+        <lon>2.334343</lon>
+      </coord>
+      <address>2 rue de la poupée qui tousse</address>
+      <address>Test commentaire localisation !@#$%^&amp;()&#x60;~*</address>
+    </eventLocation>
+    <primaryAlert>
+      <alertId>111fb03a-6fd9-41e0-8e81-990c45188888</alertId>
+      <receivedAt>2020-04-06T12:02:00+00:00</receivedAt>
+      <reporting>STANDARD</reporting>
+      <alertLocation>
+        <type>POINT</type>
+        <coord>
+          <lat>48.868893</lat>
+          <lon>2.334343</lon>
+        </coord>
+        <address>2 rue de la poupée qui tousse</address>
+        <address>Test commentaire localisation !@#$%^&amp;()&#x60;~*</address>
+      </alertLocation>
+      <call>
+        <source>requérant</source>
+        <dialledURI>tel:112</dialledURI>
+      </call>
+      <caller>
+        <callerURI>tel:+33611223344</callerURI>
+        <callbackURI>tel:+33655667788</callbackURI>
+        <spokenLanguage>fr-FR</spokenLanguage>
+        <callerInformation>témoin de l&#x27;accident</callerInformation>
+      </caller>
+      <callTaker>
+        <organization>SDIS_59</organization>
+        <controlRoom>CODIS_59</controlRoom>
+        <calltakerURI>sip:operator1@sdis59.fr</calltakerURI>
+      </callTaker>
+      <alertCode>
+        <version>latest</version>
+        <whatsHappen>
+          <code>C02.11.01</code>
+          <label>Atteinte aux personnes|Chute|Chute de grande hauteur</label>
+          <comment>Une none est tombée dans l&#x27;escalier de la Neffe !@#$%^&amp;()&#x60;~*</comment>
+        </whatsHappen>
+        <locationKind>
+          <code>L04.04.00</code>
+          <label>Lieu accueillant du public|Lieu de culte</label>
+        </locationKind>
+        <riskThreat>
+          <code>R30</code>
+          <label>Patient/Victime blessé</label>
+        </riskThreat>
+        <riskThreat>
+          <code>R37</code>
+          <label>Situation instable/indéterminée</label>
+        </riskThreat>
+        <healthMotive>
+          <code>M02.07</code>
+          <label>Traumatisme sérieux, plaie intermédiaire</label>
+        </healthMotive>
+        <victims>
+          <count>SEVERAL</count>
+          <mainVictim>PREGNANT</mainVictim>
+          <comment>Une observation de victime !@#$%^&amp;()&#x60;~*</comment>
+        </victims>
+      </alertCode>
+      <resource>
+        <resourceDesc>Photo de l&#x27;église</resourceDesc>
+        <mimeType>image/jpeg</mimeType>
+        <URI>https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Lille_St_michel_lat.JPG/220px-Lille_St_michel_lat.JPG</URI>
+        <derefURI>/9j/4AAQSkZJRgABAQEASABIAAD//gBNRmlsZSBzb3VyY2U6IGh0dHA6Ly9jb21tb25zLndpa2ltZWRpYS5vcmcvd2lraS9GaWxlOkxpbGxlX1N0X21pY2hlbF9sYXQuSlBH/9sAQwAGBAUGBQQGBgUGBwcGCAoQCgoJCQoUDg8MEBcUGBgXFBYWGh0lHxobIxwWFiAsICMmJykqKRkfLTAtKDAlKCko/9sA...</derefURI>
+        <digest>11F453355B28E1158D4E516A2D3EDF96B3450406</digest>
+      </resource>
+    </primaryAlert>
+  </createEvent>
+</message>
+        </embeddedXMLContent>
+      </contentXML>
+    </contentObject>
+  </content>
+</edxlDistribution>

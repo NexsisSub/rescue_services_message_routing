@@ -1,0 +1,109 @@
+<?xml version="1.0" ?><edxlDistribution xmlns="urn:oasis:names:tc:emergency:EDXL:DE:2.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ct="urn:oasis:names:tc:emergency:edxl:ct:1.0" xlink:type="extended">
+  <distributionID>443dbab3-7106-42f6-80c6-5f698c74215b</distributionID>
+  <senderID>cga-pompier-sdis77</senderID>
+  <dateTimeSent>2020-11-02T15:53:17+00:00</dateTimeSent>
+  <dateTimeExpires>2070-11-02T15:53:17+00:00</dateTimeExpires>
+  <distributionStatus>Actual</distributionStatus>
+  <distributionKind>Report</distributionKind>
+  <descriptor xlink:type="resource">
+    <language>fr-FR</language>
+    <explicitAddress>
+      <explicitAddressScheme>sge</explicitAddressScheme>
+      <explicitAddressValue>sgc-enki</explicitAddressValue>
+    </explicitAddress>
+  </descriptor>
+  <content xlink:type="resource">
+    <contentObject xlink:type="resource">
+      <contentXML>
+        <embeddedXMLContent>
+          <message xmlns="urn:emergency:cisu:2.0">
+  <messageId>443dbab3-7106-42f6-80c6-5f698c74215b</messageId>
+  <sender>
+    <name>pompier-sdis77</name>
+    <URI>sge:cga-pompier-sdis77</URI>
+  </sender>
+  <sentAt>2020-11-02T15:53:17+00:00</sentAt>
+  <msgType>ALERT</msgType>
+  <status>ACTUAL</status>
+  <recipients>
+    <recipient>
+      <name>pompiers-91</name>
+      <URI>sge:91-cgo</URI>
+    </recipient>
+    <recipient>
+      <name>sgc-enki</name>
+      <URI>sge:sgc-enki</URI>
+    </recipient>
+  </recipients>
+  <createEvent>
+    <eventId>39b10d85-bad7-4a47-b67b-d96d33aa1f7d</eventId>
+    <createdAt>2020-11-02T15:53:17+00:00</createdAt>
+    <severity>SEVERE</severity>
+    <eventLocation>
+      <loc_Id>111fb03a-6fd9-41e0-8e81-990c45188888</loc_Id>
+      <type>POINT</type>
+      <coordsys>EPSG:4326</coordsys>
+      <height_role>AVE</height_role>
+      <coord>
+        <lat>48.691743</lat>
+        <lon>2.37193</lon>
+      </coord>
+      <address>Juvisy-sur-Orge</address>
+      <address>Juvisy-sur-Orge</address>
+      <address>(91326)</address>
+    </eventLocation>
+    <primaryAlert>
+      <alertId>48f23e29-c6bf-4f3b-87a6-d713e499a6f4</alertId>
+      <receivedAt>2020-11-02T15:52:52+00:00</receivedAt>
+      <reporting>STANDARD</reporting>
+      <alertLocation>
+        <type>POINT</type>
+        <coordsys>EPSG:4326</coordsys>
+        <coord>
+          <lat>48.691743</lat>
+          <lon>2.37193</lon>
+        </coord>
+        <address>Juvisy-sur-Orge</address>
+        <address>Juvisy-sur-Orge</address>
+        <address>(91326)</address>
+      </alertLocation>
+      <call>
+        <source>requérant</source>
+        <dialledURI>tel:112</dialledURI>
+      </call>
+      <caller>
+        <callerURI>tel:+33611223344</callerURI>
+      </caller>
+      <callTaker>
+      </callTaker>
+      <alertCode>
+        <version>latest</version>
+        <whatsHappen>
+          <code>C05.04.00</code>
+          <label>Explosion|Explosion d'un(e) substance / engin explosif</label>
+        </whatsHappen>
+        <locationKind>
+          <code>L05.04.00</code>
+          <label>Milieu naturel|Milieu maritime</label>
+        </locationKind>
+        <riskThreat>
+          <code>R03</code>
+          <label>Présence d’individu(s) ou public menaçant</label>
+        </riskThreat>
+        <healthMotive>
+          <code>M05.02</code>
+          <label>Problème ou détresse sociale|Altération de l’état général – misère physiologique et incurie</label>
+        </healthMotive>
+        <victims>
+          <count>0</count>
+          <mainVictim>CHILD</mainVictim>
+        </victims>
+      </alertCode>
+    </primaryAlert>
+  </createEvent>
+</message>
+        </embeddedXMLContent>
+      </contentXML>
+    </contentObject>
+  </content>
+</edxlDistribution>

@@ -3,6 +3,8 @@ import sys
 from aio_pika import connect, IncomingMessage, ExchangeType, Message, DeliveryMode, Exchange
 import os 
 from functools import partial
+from parser import get_recipients_and_protocol_from_edxl_string
+
 
 ROUTING_EXCHANGE = os.environ.get("ROUTING_EXCHANGE", "routing")
 ROUTING_ROUTING_KEY = os.environ.get("ROUTING_ROUTING_KEY", "routing")
@@ -12,7 +14,7 @@ MAIN_QUEUE = os.environ.get("MAIN_QUEUE", "main")
 
 AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@localhost/")
 
-DESTINATAIRES = ["pompiers-77", "samu-77"]
+DESTINATAIRES = ["pompier-sdis77", "samu-77"]
 PROTOCOLS = ["cisu", "emsi"]
 
 
@@ -20,15 +22,22 @@ async def on_message_print(message: IncomingMessage):
     print(" [x] %r:%r" % (message.routing_key, message.body))
 
 
-async def on_message_route_it(exchange: Exchange, message: IncomingMessage):    
+async def on_message_route_it(exchange: Exchange, message: IncomingMessage):
+
+
+    edxl_xml_string = message.body.decode()
+    recipients, protocol = get_recipients_and_protocol_from_edxl_string(edxl_xml_string) 
+
     routing_message = Message(
         message.body,
         delivery_mode=DeliveryMode.PERSISTENT
     )
-    await exchange.publish(
-        routing_message,
-        routing_key="routing.pompiers-77.cisu"
-    )
+    for recipient in recipients:
+        if recipient.scheme == "sge":
+            await exchange.publish(
+                routing_message,
+                routing_key=f"routing.{recipient.address}.{protocol}"
+            )
 
 
 async def on_message(exchange: Exchange, message: IncomingMessage):
