@@ -1,56 +1,52 @@
-
-
-import argparse, sys
 import asyncio
-import os
-import signal
-from nats.aio.client import Client as NATS
-import json
-import elasticsearch 
+import sys
+from aio_pika import connect, IncomingMessage, ExchangeType, Message, DeliveryMode, Exchange
+import os 
+from functools import partial
+from parser import parse_xml_string_to_dict
+from elasticsearch import Elasticsearch
 
-NATS_URI = os.environ.get("NATS_URI",  "nats://127.0.0.1:4222")
-EVENT_DATA_SUBJECT = os.environ.get("EVENT_DATA_SUBJECT", "event_data")
 
-async def run(loop):
-    nc = NATS()
+EVENT_LOGGER_QUEUE = os.environ.get("EVENT_LOGGER_QUEUE", "event_logger")
 
-    async def error_cb(e):
-        print("Error:", e)
+AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@localhost/")
+ELASTIC_URI = os.environ.get("ELASTIC_URI",  "0.0.0.0:9200")
 
-    async def closed_cb():
-        print("Connection to NATS is closed.")
-        await asyncio.sleep(0.1, loop=loop)
-        loop.stop()
+async def on_message_log_it(es_client: Elasticsearch, message: IncomingMessage):
+    edxl_data = parse_xml_string_to_dict(message.body.decode())
+    res = es_client.index(index="test-index", id=edxl_data["edxlDistribution"]["distributionID"], body=edxl_data)
 
-    async def reconnected_cb():
-        print(f"Connected to NATS at {nc.connected_url.netloc}...")
+async def on_message_print(message: IncomingMessage):
+    print(" [x] %r:%r" % (message.routing_key, message.body))
 
-    async def subscribe_handler(msg):
-        subject = msg.subject
-        reply = msg.reply
-        data = json.loads(msg.data.decode())
-        print("Received a message on '{subject} {reply}': {data}".format(
-          subject=subject, reply=reply, data=data))
+async def on_message(es_client: Elasticsearch, message: IncomingMessage):
 
-        res = es.index(index="test-index", id=1, body=doc)
-    options = {
-        "servers":[NATS_URI],
-        "loop": loop,
-        "error_cb": error_cb,
-        "closed_cb": closed_cb,
-        "reconnected_cb": reconnected_cb
-    }
 
-    await nc.connect(**options)
+    await on_message_print(message)
+    await on_message_log_it(es_client=es_client, message=message)
+    await message.ack()
 
-    print(f"Connected to NATS at {nc.connected_url.netloc}...")
 
-    await nc.subscribe(EVENT_DATA_SUBJECT, "", subscribe_handler)
+async def main(loop):
+    # Perform connection
+    connection = await connect(AMQP_URI, loop=loop)
 
-if __name__ == '__main__':
+    # Creating a channel
+    channel = await connection.channel()
+    await channel.set_qos(prefetch_count=1)
+
+    # Declare an exchange
+    queue = await channel.declare_queue(EVENT_LOGGER_QUEUE, durable=True)
+    es_client = Elasticsearch(timeout=60)
+
+
+    await queue.consume(partial(on_message, es_client))
+
+if __name__ == "__main__":
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(run(loop))
-    try:
-        loop.run_forever()
-    finally:
-        loop.close()
+    loop.create_task(main(loop))
+
+    # we enter a never-ending loop that waits for
+    # data and runs callbacks whenever necessary.
+    print(" [*] Waiting for messages. To exit press CTRL+C")
+    loop.run_forever()
