@@ -19,7 +19,7 @@ async def main(loop):
         MAIN_EXCHANGE, ExchangeType.DIRECT
     )
 
-    with open("./data/4bc6d047-bf3f-439a-93ed-6f18b64eb579.xml", 'rb') as f : 
+    with open("./data/9a009967-00f6-480c-aa70-78ffe52221fc.xml", 'rb') as f : 
         cisu_message = f.read()
     
     message = Message(
