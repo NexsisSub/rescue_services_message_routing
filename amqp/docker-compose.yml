@@ -21,35 +21,24 @@ services:
         hard: -1
     ports:
       - 9200:9200
-    networks: ["nats"]
-  # api:
-  #   build: 
-  #     context: api
-  #     dockerfile: Dockerfile
-  #   ports: 
-  #     - "80:80"
-  #   volumes: 
-  #     - ./api/app:/app
-  #   networks: ["nats"]
-  #   env_file: 
-  #     - .env
+    networks: ["sgenet"]
 
-  # routeur:
-  #   build: 
-  #     context: routeur
-  #     dockerfile: Dockerfile
-  #   networks: ["nats"]
-  #   env_file: 
-  #     - .env
+  dispatcher:
+    build: 
+      context: dispatcher
+      dockerfile: Dockerfile
+    networks: ["sgenet"]
+    env_file: 
+      - .env
 
-  # event-logger:
-  #   build: 
-  #     context: event_logger
-  #     dockerfile: Dockerfile
-  #   networks: ["nats"]
-  #   env_file: 
-  #     - .env
+  event-logger:
+    build: 
+      context: event-logger
+      dockerfile: Dockerfile
+    networks: ["sgenet"]
+    env_file: 
+      - .env
   
 networks:
-  nats:
-    name: nats
+  sgenet:
+    name: sgenet

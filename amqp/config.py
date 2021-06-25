@@ -6,7 +6,7 @@ from functools import partial
 
 MAIN_EXCHANGE = os.environ.get("MAIN_EXCHANGE", "main")
 MAIN_ROUTING_KEY = os.environ.get("MAIN_ROUTING_KEY", "main")
-MAIN_QUEUE = os.environ.get("MAIN_QUEUE", "main")
+MAIN_QUEUE = os.environ.get("MAIN_QUEUE", "exchange")
 EVENT_LOGGER_QUEUE = os.environ.get("EVENT_LOGGER_QUEUE", "event_logger")
 AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@localhost/")
 
