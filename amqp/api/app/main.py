@@ -1,44 +1,53 @@
-from typing import Optional
-from nats.aio.client import Client as NATS
-from fastapi import FastAPI
-import json
 import asyncio
-import os
+import tornado.ioloop
+import tornado.web
 
-app = FastAPI()
-nc = NATS()
+from aio_pika import connect_robust, Message
 
-ROUTEUR_SUBJECT = os.environ.get("ROUTEUR_SUBJECT", "routing")
-
-async def error_cb(e):
-    print("Error:", e)
-
-async def closed_cb():
-    print("Connection to NATS is closed.")
-
-async def reconnected_cb():
-    print(f"Connected to NATS at {nc.connected_url.netloc}...")
+tornado.ioloop.IOLoop.configure("tornado.platform.asyncio.AsyncIOLoop")
+io_loop = tornado.ioloop.IOLoop.current()
+asyncio.set_event_loop(io_loop.asyncio_loop)
 
 
+QUEUE = asyncio.Queue()
 
-@app.on_event("startup")
-async def startup_event():
-    options = {
-        "servers":["nats://nats:4222"],
-        "error_cb": error_cb,
-        "closed_cb": closed_cb,
-        "reconnected_cb": reconnected_cb
-    }
 
-    await nc.connect(**options)
+class SubscriberHandler(tornado.web.RequestHandler):
+    async def get(self):
+        message = await QUEUE.get()
+        self.finish(message.body)
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
 
-@app.get("/echange")
-async def read_root():
-    await nc.publish(ROUTEUR_SUBJECT, json.dumps({"destinataires": ["pompiers-77", "samu-77"] }).encode())
+class PublisherHandler(tornado.web.RequestHandler):
+    async def post(self):
+        connection = self.application.settings["amqp_connection"]
+        channel = await connection.channel()
 
-    return {"Hello": "Send"}
+        try:
+            await channel.default_exchange.publish(
+                Message(body=self.request.body), routing_key="test",
+            )
+        finally:
+            await channel.close()
 
+        self.finish("OK")
+
+
+async def make_app():
+    amqp_connection = await connect_robust()
+
+    channel = await amqp_connection.channel()
+    queue = await channel.declare_queue("test", auto_delete=True)
+    await queue.consume(QUEUE.put, no_ack=True)
+
+    return tornado.web.Application(
+        [(r"/publish", PublisherHandler), (r"/subscribe", SubscriberHandler)],
+        amqp_connection=amqp_connection,
+    )
+
+
+if __name__ == "__main__":
+    app = io_loop.asyncio_loop.run_until_complete(make_app())
+    app.listen(8888)
+
+    tornado.ioloop.IOLoop.current().start()

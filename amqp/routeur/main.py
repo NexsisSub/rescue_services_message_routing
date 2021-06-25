@@ -19,12 +19,10 @@ PROTOCOLS = ["cisu", "emsi"]
 
 
 async def on_message_print(message: IncomingMessage):
-    print(" [x] %r:%r" % (message.routing_key, message.body))
+    print(f" [->] Route message : {message.routing_key}")
 
 
 async def on_message_route_it(exchange: Exchange, message: IncomingMessage):
-
-
     edxl_xml_string = message.body.decode()
     recipients, protocol = get_recipients_and_protocol_from_edxl_string(edxl_xml_string) 
 
@@ -75,8 +73,5 @@ async def main(loop):
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
     loop.create_task(main(loop))
-
-    # we enter a never-ending loop that waits for
-    # data and runs callbacks whenever necessary.
     print(" [*] Waiting for messages. To exit press CTRL+C")
     loop.run_forever()

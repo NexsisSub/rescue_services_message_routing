@@ -17,11 +17,9 @@ async def on_message_log_it(es_client: Elasticsearch, message: IncomingMessage):
     res = es_client.index(index="test-index", id=edxl_data["edxlDistribution"]["distributionID"], body=edxl_data)
 
 async def on_message_print(message: IncomingMessage):
-    print(" [x] %r:%r" % (message.routing_key, message.body))
+    print(f"[->] Store data {message.routing_key}")
 
 async def on_message(es_client: Elasticsearch, message: IncomingMessage):
-
-
     await on_message_print(message)
     await on_message_log_it(es_client=es_client, message=message)
     await message.ack()
