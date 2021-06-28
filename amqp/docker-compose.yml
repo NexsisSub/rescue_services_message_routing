@@ -24,6 +24,32 @@ services:
       - 9200:9200
     networks: ["sgenet"]
 
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.13.1
+    hostname: logstash
+    container_name: logstash
+    environment:
+      - 'xpack.monitoring.enabled=true'
+    ports:
+      - '127.0.0.1:4560:4560'
+      - '127.0.0.1:5044:5044'
+    volumes:
+      - ./logs/logstash/config.conf:/usr/share/logstash/pipeline/logstash.conf
+    networks: ["sgenet"]
+    depends_on:
+      - elasticsearch
+  
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:7.13.1
+    hostname: filebeat
+    container_name: filebeat
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./logs/filebeat/config.yml:/usr/share/filebeat/filebeat.yml
+    command: filebeat -e
+    restart: on-failure
+    networks: ["sgenet"]
+  
   api:
     build: 
       context: api
@@ -43,7 +69,12 @@ services:
       - .env
     ports:
       - 8881:8881
-
+    labels:
+      - co.elastic.logs/module=apache2
+      - co.elastic.logs/fileset.stdout=access
+      - co.elastic.logs/fileset.stderr=error
+      - co.elastic.metrics/module=apache
+      - co.elastic.metrics/metricsets=status
   event-logger:
     build: 
       context: event-logger
