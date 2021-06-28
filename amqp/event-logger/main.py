@@ -17,7 +17,7 @@ async def on_message_log_it(es_client: Elasticsearch, message: IncomingMessage):
     res = es_client.index(index="test-index", id=edxl_data["edxlDistribution"]["distributionID"], body=edxl_data)
 
 async def on_message_print(message: IncomingMessage):
-    print(f"[->] Store data {message.routing_key}")
+    print(f"[->] Store data from {message.routing_key}")
 
 async def on_message(es_client: Elasticsearch, message: IncomingMessage):
     await on_message_print(message)
@@ -35,7 +35,7 @@ async def main(loop):
 
     # Declare an exchange
     queue = await channel.declare_queue(EVENT_LOGGER_QUEUE, durable=True)
-    es_client = Elasticsearch(timeout=60)
+    es_client = Elasticsearch(ELASTIC_URI, timeout=60)
 
 
     await queue.consume(partial(on_message, es_client))

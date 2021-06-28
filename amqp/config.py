@@ -3,7 +3,6 @@ import sys
 from aio_pika import connect, IncomingMessage, ExchangeType, Message, DeliveryMode, Exchange
 import os 
 from functools import partial
-from dotenv import load_dotenv
 
 DISTRIBUTION_EXCHANGE = os.environ.get("MAIN_EXCHANGE", "distribution")
 DISTRIBUTION_ROUTING_KEY = os.environ.get("DISTRIBUTION_ROUTING_KEY", "distribution")

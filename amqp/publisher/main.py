@@ -2,7 +2,7 @@ import sys
 import asyncio
 from aio_pika import connect, Message, DeliveryMode, ExchangeType
 import os
-
+import logging
 DISTRIBUTION_EXCHANGE = os.environ.get("DISTRIBUTION_EXCHANGE", "distribution")
 DISTRIBUTION_ROUTING_KEY = os.environ.get("DISTRIBUTION_ROUTING_KEY", "distribution")
 
@@ -21,6 +21,9 @@ async def main(loop):
 
     with open("./data/9a009967-00f6-480c-aa70-78ffe52221fc.xml", 'rb') as f : 
         cisu_message = f.read()
+
+    logging.info(f"[->] Send message to {DISTRIBUTION_ROUTING_KEY}")
+    
     
     message = Message(
         cisu_message,

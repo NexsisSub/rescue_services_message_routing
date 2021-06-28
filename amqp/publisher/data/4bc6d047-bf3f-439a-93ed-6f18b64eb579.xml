@@ -1,0 +1,101 @@
+<?xml version="1.0" ?><edxlDistribution xmlns="urn:oasis:names:tc:emergency:EDXL:DE:2.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ct="urn:oasis:names:tc:emergency:edxl:ct:1.0" xlink:type="extended">
+  <distributionID>3d2fec39-bed0-4d74-b198-964aaf19f9ce</distributionID>
+  <senderID>cga-pompier-sdis77</senderID>
+  <dateTimeSent>2020-11-02T15:52:45+00:00</dateTimeSent>
+  <dateTimeExpires>2070-11-02T15:52:45+00:00</dateTimeExpires>
+  <distributionStatus>Actual</distributionStatus>
+  <distributionKind>Report</distributionKind>
+  <descriptor xlink:type="resource">
+    <language>fr-FR</language>
+    <explicitAddress>
+      <explicitAddressScheme>sge</explicitAddressScheme>
+      <explicitAddressValue>pompier-sdis77</explicitAddressValue>
+    </explicitAddress>
+  </descriptor>
+  <content xlink:type="resource">
+    <contentObject xlink:type="resource">
+      <contentXML>
+        <embeddedXMLContent>
+          <message xmlns="urn:emergency:cisu:2.0">
+  <messageId>3d2fec39-bed0-4d74-b198-964aaf19f9ce</messageId>
+  <sender>
+    <name>pompier-sdis77</name>
+    <URI>sge:cga-pompier-sdis77</URI>
+  </sender>
+  <sentAt>2020-11-02T15:52:45+00:00</sentAt>
+  <msgType>ALERT</msgType>
+  <status>ACTUAL</status>
+  <recipients>
+    <recipient>
+      <name>sgc-enki</name>
+      <URI>sge:sgc-enki</URI>
+    </recipient>
+  </recipients>
+  <createEvent>
+    <eventId>772e47b6-ac63-4c38-ad7a-3354dcfeb3e4</eventId>
+    <createdAt>2020-11-02T15:52:45+00:00</createdAt>
+    <severity>SEVERE</severity>
+    <eventLocation>
+      <loc_Id>111fb03a-6fd9-41e0-8e81-990c45188888</loc_Id>
+      <type>POINT</type>
+      <coordsys>EPSG:4326</coordsys>
+      <height_role>AVE</height_role>
+      <coord>
+        <lat>48.886622</lat>
+        <lon>2.598313</lon>
+      </coord>
+      <address>Chelles</address>
+      <address>Chelles</address>
+      <address>(77108)</address>
+    </eventLocation>
+    <primaryAlert>
+      <alertId>08b2f134-c11e-4b06-a2c0-c3851764f5a4</alertId>
+      <receivedAt>2020-11-02T15:52:30+00:00</receivedAt>
+      <reporting>STANDARD</reporting>
+      <alertLocation>
+        <type>POINT</type>
+        <coordsys>EPSG:4326</coordsys>
+        <coord>
+          <lat>48.886622</lat>
+          <lon>2.598313</lon>
+        </coord>
+        <address>Chelles</address>
+        <address>Chelles</address>
+        <address>(77108)</address>
+      </alertLocation>
+      <call>
+        <source>requérant</source>
+        <dialledURI>tel:112</dialledURI>
+      </call>
+      <caller>
+        <callerURI>tel:+33611223344</callerURI>
+      </caller>
+      <callTaker>
+      </callTaker>
+      <alertCode>
+        <version>latest</version>
+        <whatsHappen>
+          <code>C03.03.00</code>
+          <label>Atteinte aux biens / animal|Cambriolage</label>
+        </whatsHappen>
+        <locationKind>
+          <code>L04.03.00</code>
+          <label>Lieu accueillant du public|Parc de stationnement ouvert au public</label>
+        </locationKind>
+        <healthMotive>
+          <code>M01.02</code>
+          <label>Détresse vitale|Altération de la conscience</label>
+        </healthMotive>
+        <victims>
+          <count>1</count>
+          <mainVictim>PREGNANT</mainVictim>
+        </victims>
+      </alertCode>
+    </primaryAlert>
+  </createEvent>
+</message>
+        </embeddedXMLContent>
+      </contentXML>
+    </contentObject>
+  </content>
+</edxlDistribution>
