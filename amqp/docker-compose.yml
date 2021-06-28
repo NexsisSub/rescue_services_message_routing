@@ -24,6 +24,14 @@ services:
       - 9200:9200
     networks: ["sgenet"]
 
+  api:
+    build: 
+      context: api
+      dockerfile: Dockerfile
+    networks: ["sgenet"]
+    env_file: 
+      - .env
+      
   dispatcher:
     build: 
       context: dispatcher

@@ -1,1 +1,2 @@
-asyncio-nats-client
+tornado
+aio_pika

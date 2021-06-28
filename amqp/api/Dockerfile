@@ -1,10 +1,13 @@
-FROM tiangolo/uvicorn-gunicorn-fastapi:python3.8
+FROM python:3.8
 
-ADD requirements.txt .
+EXPOSE 8888
 
-RUN pip install -r requirements.txt
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 
-COPY ./app /app
+COPY requirements.txt /usr/src/app/
+RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80", "--reload"]
- 
+COPY . .
+
+ENTRYPOINT ["python", "main.py"]
