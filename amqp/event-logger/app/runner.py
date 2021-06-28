@@ -3,7 +3,8 @@ import sys
 from aio_pika import connect, IncomingMessage, ExchangeType, Message, DeliveryMode, Exchange, Channel
 import os 
 from functools import partial
-from parser import get_recipients_and_protocol_from_edxl_string
+from parser import parse_xml_string_to_dict
+from elasticsearch import Elasticsearch
 
 AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@localhost/")
 ELASTIC_URI = os.environ.get("ELASTIC_URI",  "0.0.0.0:9200")

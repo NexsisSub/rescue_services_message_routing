@@ -3,10 +3,11 @@ from fastapi import FastAPI
 import json
 import asyncio
 import os
-from runner import on_message, configure_routing_exchange
+from runner import on_message
 from aio_pika import connect
 from functools import partial
 from runner import on_message
+from elasticsearch import Elasticsearch
 
 EVENT_LOGGER_QUEUE = os.environ.get("EVENT_LOGGER_QUEUE", "event_logger")
 
@@ -16,7 +17,7 @@ ELASTIC_URI = os.environ.get("ELASTIC_URI",  "0.0.0.0:9200")
 app = FastAPI()
 
 async def main():
-    connection = await connect(AMQP_URI, loop=loop)
+    connection = await connect(AMQP_URI)
     channel = await connection.channel()
     await channel.set_qos(prefetch_count=1)
     queue = await channel.declare_queue(EVENT_LOGGER_QUEUE, durable=True)
