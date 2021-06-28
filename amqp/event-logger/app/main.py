@@ -8,6 +8,8 @@ from aio_pika import connect
 from functools import partial
 from runner import on_message
 from elasticsearch import Elasticsearch
+from starlette_exporter import PrometheusMiddleware, handle_metrics
+
 
 EVENT_LOGGER_QUEUE = os.environ.get("EVENT_LOGGER_QUEUE", "event_logger")
 
@@ -15,6 +17,9 @@ AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@localhost/")
 ELASTIC_URI = os.environ.get("ELASTIC_URI",  "0.0.0.0:9200")
 
 app = FastAPI()
+app.add_middleware(PrometheusMiddleware)
+app.add_route("/metrics", handle_metrics)
+
 
 async def main():
     connection = await connect(AMQP_URI)

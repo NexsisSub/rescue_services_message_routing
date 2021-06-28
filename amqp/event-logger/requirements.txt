@@ -1,3 +1,4 @@
 elasticsearch[async]
 aio_pika
 xmltodict
+starlette_exporter
