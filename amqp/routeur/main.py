@@ -12,7 +12,7 @@ ROUTING_QUEUE = os.environ.get("ROUTING_QUEUE", "routing")
 DESTINATAIRE = "routing.pompiers-77.cisu"
 MAIN_QUEUE = os.environ.get("MAIN_QUEUE", "main")
 
-AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@localhost/")
+AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@192.168.0.147:5672/")
 
 DESTINATAIRES = ["pompier-sdis77", "samu-77"]
 PROTOCOLS = ["cisu", "emsi"]

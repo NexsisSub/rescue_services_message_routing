@@ -3,10 +3,10 @@ import asyncio
 from aio_pika import connect, Message, DeliveryMode, ExchangeType
 import os
 
-MAIN_EXCHANGE = os.environ.get("MAIN_EXCHANGE", "main")
-MAIN_ROUTING_KEY = os.environ.get("MAIN_ROUTING_KEY", "main")
+MAIN_EXCHANGE = os.environ.get("MAIN_EXCHANGE", "distribution")
+MAIN_ROUTING_KEY = os.environ.get("MAIN_ROUTING_KEY", "distribution")
 
-AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@localhost/")
+AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@192.168.0.147:5672/")
 
 async def main(loop):
     # Perform connection

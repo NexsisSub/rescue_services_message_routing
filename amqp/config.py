@@ -4,11 +4,11 @@ from aio_pika import connect, IncomingMessage, ExchangeType, Message, DeliveryMo
 import os 
 from functools import partial
 
-MAIN_EXCHANGE = os.environ.get("MAIN_EXCHANGE", "main")
-MAIN_ROUTING_KEY = os.environ.get("MAIN_ROUTING_KEY", "main")
-MAIN_QUEUE = os.environ.get("MAIN_QUEUE", "main")
+MAIN_EXCHANGE = os.environ.get("MAIN_EXCHANGE", "distribution")
+MAIN_ROUTING_KEY = os.environ.get("MAIN_ROUTING_KEY", "distribution")
+MAIN_QUEUE = os.environ.get("MAIN_QUEUE", "distribution")
 EVENT_LOGGER_QUEUE = os.environ.get("EVENT_LOGGER_QUEUE", "event_logger")
-AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@localhost/")
+AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@192.168.0.147:5672/")
 
 
 async def configure_main_exchange(channel):
