@@ -14,6 +14,7 @@ DISTRIBUTION_ROUTING_KEY = os.environ.get("DISTRIBUTION_ROUTING_KEY", "distribut
 DISTRIBUTION_QUEUE = os.environ.get("DISTRIBUTION_QUEUE", "distribution")
 ROUTING_EXCHANGE = os.environ.get("ROUTING_EXCHANGE", "routing")
 
+AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@rabbitmq:5672/")
 
 QUEUE = asyncio.Queue()
 
@@ -36,7 +37,7 @@ class PublisherHandler(tornado.web.RequestHandler):
 
 
 async def make_app():
-    amqp_connection = await connect_robust()
+    amqp_connection = await connect_robust(AMQP_URI)
 
     channel = await amqp_connection.channel()
     distribution_exchange = await channel.declare_exchange(DISTRIBUTION_EXCHANGE, ExchangeType.TOPIC)
