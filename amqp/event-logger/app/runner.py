@@ -15,7 +15,6 @@ async def on_message_log_it(es_client: Elasticsearch, message: IncomingMessage):
     xml_string = message.body.decode()
     protocol = get_protocol_from_xml_string(xml_string)
     edxl_data = parse_xml_string_to_dict(message.body.decode())
-    print(f"logging on routing-{protocol}-{datetime.today().strftime('%Y-%m-%d')}")
     res = es_client.index(
         index=f"routing-{protocol}-{datetime.today().strftime('%Y-%m-%d')}", 
         id=edxl_data["edxlDistribution"]["distributionID"], 
