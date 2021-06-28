@@ -9,7 +9,7 @@
     <language>fr-FR</language>
     <explicitAddress>
       <explicitAddressScheme>sge</explicitAddressScheme>
-      <explicitAddressValue>pompier-sdis77</explicitAddressValue>
+      <explicitAddressValue>new-test-sdis77</explicitAddressValue>
     </explicitAddress>
   </descriptor>
   <content xlink:type="resource">

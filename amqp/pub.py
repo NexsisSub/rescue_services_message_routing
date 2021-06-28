@@ -3,10 +3,10 @@ import asyncio
 from aio_pika import connect, Message, DeliveryMode, ExchangeType
 import os
 
-MAIN_EXCHANGE = os.environ.get("MAIN_EXCHANGE", "distribution")
-MAIN_ROUTING_KEY = os.environ.get("MAIN_ROUTING_KEY", "distribution")
+DISTRIBUTION_EXCHANGE = os.environ.get("DISTRIBUTION_EXCHANGE", "distribution")
+DISTRIBUTION_ROUTING_KEY = os.environ.get("DISTRIBUTION_ROUTING_KEY", "distribution")
 
-AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@192.168.0.147:5672/")
+AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@localhost:5672/")
 
 async def main(loop):
     # Perform connection
@@ -16,7 +16,7 @@ async def main(loop):
     channel = await connection.channel()
 
     main_exchange = await channel.declare_exchange(
-        MAIN_EXCHANGE, ExchangeType.DIRECT
+        DISTRIBUTION_EXCHANGE, ExchangeType.TOPIC
     )
 
     with open("./data/9a009967-00f6-480c-aa70-78ffe52221fc.xml", 'rb') as f : 
@@ -28,7 +28,7 @@ async def main(loop):
     )
 
     # Sending the message
-    await main_exchange.publish(message, routing_key=MAIN_ROUTING_KEY)
+    await main_exchange.publish(message, routing_key=DISTRIBUTION_ROUTING_KEY)
 
     print(" [x] Sent %r" % message)
 
