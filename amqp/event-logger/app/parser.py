@@ -6,9 +6,17 @@ def parse_xml_file_to_dict(filename):
         data_dict = xmltodict.parse(xml_file.read())
     return json.loads(json.dumps(data_dict))
 
+
 def parse_xml_string_to_dict(xml_string):
     data_dict = xmltodict.parse(xml_string)
     return json.loads(json.dumps(data_dict))
+
+
+def get_protocol_from_xml(xml):
+    message =  get_xml_from_tag_name(xml=xml, tag="message")[0]
+    protocol = message.getAttribute("xmlns").split(":")[-2:-1][0]
+    return protocol
+
 
 if __name__ == "__main__":
 

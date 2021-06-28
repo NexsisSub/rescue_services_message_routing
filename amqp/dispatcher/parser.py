@@ -26,6 +26,7 @@ def get_recipients_and_protocol_from_edxl_string(xml_string):
     dom = xml.dom.minidom.parseString(xml_string)
     return get_recipients_from_xml(dom) , get_protocol_from_xml(dom)
 
+
 def get_recipients_from_xml(xml):
     tags = get_xml_from_tag_name(xml=xml, tag="explicitAddress")
     recipients = [Recipient.from_xml(tag) for tag in tags]
@@ -36,7 +37,6 @@ def get_protocol_from_xml(xml):
     message =  get_xml_from_tag_name(xml=xml, tag="message")[0]
     protocol = message.getAttribute("xmlns").split(":")[-2:-1][0]
     return protocol
-
 
 
 if __name__ == "__main__":
