@@ -33,6 +33,7 @@ services:
       - .env
     ports:
       - 8888:8888
+
   dispatcher:
     build: 
       context: dispatcher
@@ -40,6 +41,8 @@ services:
     networks: ["sgenet"]
     env_file: 
       - .env
+    ports:
+      - 8881:8881
 
   event-logger:
     build: 
@@ -48,7 +51,8 @@ services:
     networks: ["sgenet"]
     env_file: 
       - .env
-  
+    ports:
+      - 8882:8882
 networks:
   sgenet:
     name: sgenet

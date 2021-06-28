@@ -12,11 +12,6 @@ ROUTING_QUEUE = os.environ.get("ROUTING_QUEUE", "routing")
 DESTINATAIRE = "routing.pompiers-77.cisu"
 DISTRIBUTION_QUEUE = os.environ.get("DISTRIBUTION_QUEUE", "distribution")
 
-AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@rabbitmq:5672/")
-
-DESTINATAIRES = ["pompier-sdis77", "samu-77"]
-PROTOCOLS = ["cisu", "emsi"]
-
 
 async def on_message_print(message: IncomingMessage):
     print(f" [->] Route message : {message.routing_key} ")
@@ -48,27 +43,3 @@ async def on_message(channel: Channel, exchange: Exchange, message: IncomingMess
 async def configure_routing_exchange(channel):
     routing_exchange = await channel.declare_exchange(ROUTING_EXCHANGE, ExchangeType.TOPIC)
     return routing_exchange
-
-
-async def main(loop):
-    # Perform connection
-    connection = await connect(AMQP_URI, loop=loop)
-
-    # Creating a channel
-    channel = await connection.channel()
-    await channel.set_qos(prefetch_count=1)
-
-    # Declare an exchange
-
-    queue = await channel.declare_queue(DISTRIBUTION_QUEUE, durable=True)
-
-    routing_exchange = await configure_routing_exchange(channel)
-
-    await queue.consume(partial(on_message, channel, routing_exchange))
-
-
-if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
-    loop.create_task(main(loop))
-    print(" [*] Waiting for messages. To exit press CTRL+C")
-    loop.run_forever()
