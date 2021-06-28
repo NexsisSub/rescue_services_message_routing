@@ -1,5 +1,9 @@
 # Exchange rouing system for rescue services
 
-NATS
-FastAPI
 Elasticsearch + Kibana
+
+## AMQP -> RabbitMQ
+
+![Archi](architecture.png)
+
+## NATS
