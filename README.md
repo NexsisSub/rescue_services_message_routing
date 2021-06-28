@@ -1,4 +1,4 @@
-# Exchange rouing system for rescue services
+# Exchange routing system for rescue services
 
 Elasticsearch + Kibana
 
