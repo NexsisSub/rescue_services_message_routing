@@ -6,9 +6,9 @@ from functools import partial
 from parser import parse_xml_string_to_dict, get_protocol_from_xml_string
 from elasticsearch import Elasticsearch
 from datetime import datetime
+import requests
 
-
-AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@localhost/")
+AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@localhost:5672/")
 ELASTIC_URI = os.environ.get("ELASTIC_URI",  "0.0.0.0:9200")
 
 async def on_message_log_it(es_client: Elasticsearch, message: IncomingMessage):
@@ -28,3 +28,17 @@ async def on_message(es_client: Elasticsearch, message: IncomingMessage):
     await on_message_print(message)
     await on_message_log_it(es_client=es_client, message=message)
     await message.ack()
+
+async def wait_for_rabbitmq_startup(amqp_uri):
+    print("wait_for_rabbitmq_startup")
+    http_uri = AMQP_URI.replace("5672/", "15672/api/aliveness-test/%2F").replace("amqp", "http")
+    is_up = False
+
+    while not is_up:
+        try:
+            connection = await aio_pika.connect(amqp_uri)
+            is_up = True
+        except Exception as e:
+            print(e)
+        asyncio.sleep(5)
+    return True

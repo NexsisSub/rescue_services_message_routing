@@ -3,7 +3,7 @@ from fastapi import FastAPI
 import json
 import asyncio
 import os
-from runner import on_message, configure_routing_exchange
+from runner import on_message, configure_routing_exchange, wait_for_rabbitmq_startup
 from aio_pika import connect
 from functools import partial
 from starlette_exporter import PrometheusMiddleware, handle_metrics
@@ -17,6 +17,7 @@ app.add_middleware(PrometheusMiddleware)
 app.add_route("/metrics", handle_metrics)
 
 async def main():
+    await wait_for_rabbitmq_startup(AMQP_URI)
     connection = await connect(AMQP_URI)
     channel = await connection.channel()
     await channel.set_qos(prefetch_count=1)

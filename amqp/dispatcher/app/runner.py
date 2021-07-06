@@ -4,7 +4,7 @@ from aio_pika import connect, IncomingMessage, ExchangeType, Message, DeliveryMo
 import os 
 from functools import partial
 from parser import get_recipients_and_protocol_from_edxl_string
-
+import time
 
 ROUTING_EXCHANGE = os.environ.get("ROUTING_EXCHANGE", "routing")
 ROUTING_ROUTING_KEY = os.environ.get("ROUTING_ROUTING_KEY", "routing")
@@ -43,3 +43,18 @@ async def on_message(channel: Channel, exchange: Exchange, message: IncomingMess
 async def configure_routing_exchange(channel):
     routing_exchange = await channel.declare_exchange(ROUTING_EXCHANGE, ExchangeType.TOPIC)
     return routing_exchange
+
+async def wait_for_rabbitmq_startup(amqp_uri):
+    print("wait_for_rabbitmq_startup")
+    is_up = False
+
+    while not is_up:
+        try:
+            connection = await connect(amqp_uri)
+            is_up = True
+        except Exception as e:
+            print(e)
+            print("Rabbit Is Not UP")
+        time.sleep(5)
+        asyncio.sleep(5)
+    return True

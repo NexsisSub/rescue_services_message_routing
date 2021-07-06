@@ -24,6 +24,19 @@ services:
       - 9200:9200
     networks: ["sgenet"]
 
+  postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+    ports:
+      - "5432:5432"
+    networks: ["sgenet"]
+    restart: unless-stopped
+    env_file: 
+      - .env
+
   api:
     build: 
       context: api

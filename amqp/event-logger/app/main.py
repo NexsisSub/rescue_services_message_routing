@@ -6,7 +6,7 @@ import os
 from runner import on_message
 from aio_pika import connect
 from functools import partial
-from runner import on_message
+from runner import on_message, wait_for_rabbitmq_startup
 from elasticsearch import Elasticsearch
 from starlette_exporter import PrometheusMiddleware, handle_metrics
 
@@ -21,7 +21,9 @@ app.add_middleware(PrometheusMiddleware)
 app.add_route("/metrics", handle_metrics)
 
 
-async def main():
+async def main():    
+    print("starting main ")
+    await wait_for_rabbitmq_startup()
     connection = await connect(AMQP_URI)
     channel = await connection.channel()
     await channel.set_qos(prefetch_count=1)
