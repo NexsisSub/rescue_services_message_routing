@@ -28,7 +28,7 @@ class PublisherHandler(tornado.web.RequestHandler):
         distribution_queue = yield channel.declare_queue(DISTRIBUTION_QUEUE, durable=True)
         try:
             yield distribution_exchange.publish(
-                Message(body=self.request.body), routing_key=DISTRIBUTION_ROUTING_KEY,
+                Message(body=self.request.body,  headers={"ttl":10}), routing_key=DISTRIBUTION_ROUTING_KEY,
             )
         finally:
             yield channel.close()

@@ -16,7 +16,11 @@ async def configure_distribution_exchange(channel):
     distribution_exchange = await channel.declare_exchange(DISTRIBUTION_EXCHANGE, ExchangeType.TOPIC)
 
     distribution_queue = await channel.declare_queue(DISTRIBUTION_QUEUE, durable=True)
-    await distribution_queue.bind(distribution_exchange, routing_key=DISTRIBUTION_ROUTING_KEY)
+    await distribution_queue.bind(distribution_exchange, routing_key=DISTRIBUTION_ROUTING_KEY,   
+    arguments={
+        "x-dead-letter-exchange" : "dlx",
+        }
+    )
     return distribution_exchange
 
 async def configure_routing_exchange(channel):
@@ -24,6 +28,14 @@ async def configure_routing_exchange(channel):
     event_logger_queue = await channel.declare_queue(EVENT_LOGGER_QUEUE, durable=True)
     await event_logger_queue.bind(routing_exchange, routing_key="routing.#")
     return routing_exchange
+
+async def configure_dead_letter_exchange(channel):
+    dead_letter_exchange = await channel.declare_exchange("dlx", ExchangeType.TOPIC)
+    dead_letter_queue = await channel.declare_queue("dlx_queue.cisu", durable=True)
+    await dead_letter_queue.bind(dead_letter_exchange, routing_key="#.cisu")
+    dead_letter_queue = await channel.declare_queue("dlx_queue.emsi", durable=True)
+    await dead_letter_queue.bind(dead_letter_exchange, routing_key="#.emsi")
+    return dead_letter_exchange
 
 
 async def main(loop):
@@ -36,7 +48,8 @@ async def main(loop):
 
     # Declare an exchange
     main_exchange = await configure_distribution_exchange(channel)
-    main_exchange = await configure_routing_exchange(channel)
+    routing_exchange = await configure_routing_exchange(channel)
+    dlx = await configure_dead_letter_exchange(channel)
 
 
 
