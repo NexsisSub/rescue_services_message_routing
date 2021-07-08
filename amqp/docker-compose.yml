@@ -10,19 +10,19 @@ services:
         - 15672:15672
       networks: ["sgenet"]
 
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.13.1
-    environment:
-      - discovery.type=single-node
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    ports:
-      - 9200:9200
-    networks: ["sgenet"]
+  # elasticsearch:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:7.13.1
+  #   environment:
+  #     - discovery.type=single-node
+  #     - bootstrap.memory_lock=true
+  #     - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
+  #   ports:
+  #     - 9200:9200
+  #   networks: ["sgenet"]
 
   postgres:
     container_name: postgres
@@ -57,15 +57,15 @@ services:
     ports:
       - 8881:8881
 
-  event-logger:
-    build: 
-      context: event-logger
-      dockerfile: Dockerfile
-    networks: ["sgenet"]
-    env_file: 
-      - .env
-    ports:
-      - 8882:8882
+  # event-logger:
+  #   build: 
+  #     context: event-logger
+  #     dockerfile: Dockerfile
+  #   networks: ["sgenet"]
+  #   env_file: 
+  #     - .env
+  #   ports:
+  #     - 8882:8882
 networks:
   sgenet:
     name: sgenet

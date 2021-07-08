@@ -1,2 +1,5 @@
 aio_pika
 starlette_exporter
+sqlalchemy
+pydantic
+psycopg2

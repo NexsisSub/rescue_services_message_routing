@@ -7,6 +7,9 @@ from runner import on_message, configure_routing_exchange, wait_for_rabbitmq_sta
 from aio_pika import connect
 from functools import partial
 from starlette_exporter import PrometheusMiddleware, handle_metrics
+from database import SessionLocal
+from models import Base
+from database import engine
 
 
 AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@rabbitmq:5672/")
@@ -16,6 +19,9 @@ app = FastAPI()
 app.add_middleware(PrometheusMiddleware)
 app.add_route("/metrics", handle_metrics)
 
+
+Base.metadata.create_all(bind=engine)
+
 async def main():
     await wait_for_rabbitmq_startup(AMQP_URI)
     connection = await connect(AMQP_URI)
@@ -23,7 +29,8 @@ async def main():
     await channel.set_qos(prefetch_count=1)
     queue = await channel.declare_queue(DISTRIBUTION_QUEUE, durable=True)
     routing_exchange = await configure_routing_exchange(channel)
-    await queue.consume(partial(on_message, channel, routing_exchange))
+    db = SessionLocal()
+    await queue.consume(partial(on_message, channel, routing_exchange, db))
 
 
 @app.on_event("startup")
