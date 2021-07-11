@@ -7,22 +7,20 @@ from runner import on_message
 from aio_pika import connect
 from functools import partial
 from runner import on_message, wait_for_rabbitmq_startup
-from elasticsearch import Elasticsearch
 from starlette_exporter import PrometheusMiddleware, handle_metrics
 
 
-EVENT_LOGGER_QUEUE = os.environ.get("EVENT_LOGGER_QUEUE", "event_logger")
+DLX_QUEUE = os.environ.get("DLX_QUEUE", "dlx_queue")
 
-AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@localhost/")
-ELASTIC_URI = os.environ.get("ELASTIC_URI",  "0.0.0.0:9200")
+AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@rabbitmq:5672/")
 
+PROTOCOLS = os.environ.get("PROTOCOLS", "cisu/emsi").split("/")
 
 app = FastAPI(
-    title="Event Logger",
-    description=f"Event logger listening to {EVENT_LOGGER_QUEUE} queue and store all messages to ELK",
+    title="Errors Worker",
+    description="This worker handle DLX queue",
     version="0.0.1",
 )
-
 app.add_middleware(PrometheusMiddleware)
 app.add_route("/metrics", handle_metrics)
 
@@ -33,10 +31,10 @@ async def main():
     connection = await connect(AMQP_URI)
     channel = await connection.channel()
     await channel.set_qos(prefetch_count=1)
-    queue = await channel.declare_queue(EVENT_LOGGER_QUEUE, durable=True)
-    es_client = Elasticsearch(ELASTIC_URI, timeout=60)
-    await queue.consume(partial(on_message, es_client))
-
+    
+    for protocol in PROTOCOLS: 
+        queue = await channel.declare_queue(f"{DLX_QUEUE}.{protocol}", durable=True)
+        await queue.consume(partial(on_message))
 
 @app.on_event("startup")
 async def startup_event():

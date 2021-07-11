@@ -52,10 +52,23 @@ services:
       context: dispatcher
       dockerfile: Dockerfile
     networks: ["sgenet"]
+    volumes:
+      - ./dispatcher/app:/app
     env_file: 
       - .env
     ports:
       - 8881:8881
+  errors-worker:
+    build: 
+      context: errors-worker
+      dockerfile: Dockerfile
+    volumes:
+        - ./errors-worker/app:/app
+    networks: ["sgenet"]
+    env_file: 
+      - .env
+    ports:
+      - 8882:8882
 
   # event-logger:
   #   build: 
@@ -65,7 +78,9 @@ services:
   #   env_file: 
   #     - .env
   #   ports:
-  #     - 8882:8882
+  #     - 8883:8883
+  #   volumes:
+  #     - ./event-logger/app:/app
 networks:
   sgenet:
     name: sgenet

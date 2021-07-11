@@ -4,8 +4,9 @@ from pydantic import BaseModel
 from uuid import uuid4
 
 class Event(BaseModel):
-    id: str = uuid4()
+    id: str = str(uuid4())
     created_at: datetime = datetime.now()
+    routed_at: datetime
     raw: str 
     status: str
 

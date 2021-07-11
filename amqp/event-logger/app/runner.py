@@ -31,12 +31,12 @@ async def on_message(es_client: Elasticsearch, message: IncomingMessage):
 
 async def wait_for_rabbitmq_startup(amqp_uri):
     print("wait_for_rabbitmq_startup")
-    http_uri = AMQP_URI.replace("5672/", "15672/api/aliveness-test/%2F").replace("amqp", "http")
+    http_uri = amqp_uri.replace("5672/", "15672/api/aliveness-test/%2F").replace("amqp", "http")
     is_up = False
 
     while not is_up:
         try:
-            connection = await aio_pika.connect(amqp_uri)
+            connection = await connect(amqp_uri)
             is_up = True
         except Exception as e:
             print(e)

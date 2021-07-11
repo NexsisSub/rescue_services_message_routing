@@ -6,10 +6,10 @@ import os
 
 POSTGRES_USER = os.environ.get("POSTGRES_USER")
 POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
-POSTGRES_DATABASE = os.environ.get("POSTGRES_DATABASE")
+POSTGRES_DB = os.environ.get("POSTGRES_DB", "sge")
 
 
-SQLALCHEMY_DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@postgres/{POSTGRES_DATABASE}"
+SQLALCHEMY_DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@postgres/{POSTGRES_DB}"
 print(SQLALCHEMY_DATABASE_URL)
 
 engine = create_engine(

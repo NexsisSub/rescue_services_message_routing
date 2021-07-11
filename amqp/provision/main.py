@@ -7,10 +7,17 @@ from functools import partial
 DISTRIBUTION_EXCHANGE = os.environ.get("MAIN_EXCHANGE", "distribution")
 DISTRIBUTION_ROUTING_KEY = os.environ.get("DISTRIBUTION_ROUTING_KEY", "distribution")
 DISTRIBUTION_QUEUE = os.environ.get("DISTRIBUTION_QUEUE", "distribution")
+
 ROUTING_EXCHANGE = os.environ.get("ROUTING_EXCHANGE", "routing")
+
+DLX_QUEUE = os.environ.get("DLX_QUEUE", "dlx_queue")
+DLX_EXCHANGE = os.environ.get("DLX_EXCHANGE", "dlx")
 
 EVENT_LOGGER_QUEUE = os.environ.get("EVENT_LOGGER_QUEUE", "event_logger")
 AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@localhost:5672/")
+
+
+PROTOCOLS = os.environ.get("PROTOCOLS", "cisu/emsi").split("/")
 
 async def configure_distribution_exchange(channel):
     distribution_exchange = await channel.declare_exchange(DISTRIBUTION_EXCHANGE, ExchangeType.TOPIC)
@@ -30,11 +37,12 @@ async def configure_routing_exchange(channel):
     return routing_exchange
 
 async def configure_dead_letter_exchange(channel):
-    dead_letter_exchange = await channel.declare_exchange("dlx", ExchangeType.TOPIC)
-    dead_letter_queue = await channel.declare_queue("dlx_queue.cisu", durable=True)
-    await dead_letter_queue.bind(dead_letter_exchange, routing_key="#.cisu")
-    dead_letter_queue = await channel.declare_queue("dlx_queue.emsi", durable=True)
-    await dead_letter_queue.bind(dead_letter_exchange, routing_key="#.emsi")
+    dead_letter_exchange = await channel.declare_exchange(DLX_EXCHANGE, ExchangeType.TOPIC)
+
+    for protocol in PROTOCOLS:
+        dead_letter_queue = await channel.declare_queue(f"{DLX_QUEUE}.{protocol}", durable=True)
+        await dead_letter_queue.bind(dead_letter_exchange, routing_key=f"#.{protocol}")
+
     return dead_letter_exchange
 
 

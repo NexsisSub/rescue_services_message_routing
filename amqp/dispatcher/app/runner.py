@@ -8,6 +8,8 @@ import time
 from sqlalchemy.orm import Session
 from services import create_event
 from  schema import Event as EventSchema
+from datetime import datetime
+
 ROUTING_EXCHANGE = os.environ.get("ROUTING_EXCHANGE", "routing")
 ROUTING_ROUTING_KEY = os.environ.get("ROUTING_ROUTING_KEY", "routing")
 ROUTING_QUEUE = os.environ.get("ROUTING_QUEUE", "routing")
@@ -40,13 +42,15 @@ async def on_message_route_it(channel: Channel, exchange: Exchange, message: Inc
 
 
 async def on_message(channel: Channel, exchange: Exchange, db: Session, message: IncomingMessage,):
+    routed_at = datetime.now()
     await on_message_print(message)
     try:
         await on_message_route_it(channel=channel, exchange=exchange, message=message)
-        create_event(db=db, event=EventSchema(raw=message.body.decode(), status="success"))
+        create_event(db=db, event=EventSchema(raw=message.body.decode(), status="success", routed_at=routed_at))
     except:
-        create_event(db=db, event=EventSchema(raw=message.body.decode(), status="failed"))
-    await message.ack()
+        create_event(db=db, event=EventSchema(raw=message.body.decode(), status="failed", routed_at=routed_at))
+    finally:
+        await message.ack()
     
 
 
@@ -65,6 +69,5 @@ async def wait_for_rabbitmq_startup(amqp_uri):
         except Exception as e:
             print(e)
             print("Rabbit Is Not UP")
-        time.sleep(5)
-        asyncio.sleep(5)
+        await asyncio.sleep(5)
     return True

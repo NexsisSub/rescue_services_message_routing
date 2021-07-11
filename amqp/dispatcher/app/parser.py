@@ -33,8 +33,11 @@ def get_recipients_from_xml(xml):
 
 
 def get_protocol_from_xml(xml):
-    message =  get_xml_from_tag_name(xml=xml, tag="message")[0]
-    protocol = message.getAttribute("xmlns").split(":")[-2:-1][0]
+    try:
+        message =  get_xml_from_tag_name(xml=xml, tag="message")[0]
+        protocol = message.getAttribute("xmlns").split(":")[-2:-1][0]
+    except:
+        pass
     return protocol
 
 

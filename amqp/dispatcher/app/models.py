@@ -12,5 +12,6 @@ class Event(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
     created_at = Column(DateTime())
+    routed_at = Column(DateTime())
     raw = Column(String)
     status = Column(String)

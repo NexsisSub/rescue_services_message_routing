@@ -15,7 +15,13 @@ from database import engine
 AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@rabbitmq:5672/")
 DISTRIBUTION_QUEUE = os.environ.get("DISTRIBUTION_QUEUE", "distribution")
 
-app = FastAPI()
+
+app = FastAPI(
+    title="Dispatcher",
+    description="The dispatcher route every message to specific queues with EDXL receivers",
+    version="0.0.1",
+)
+
 app.add_middleware(PrometheusMiddleware)
 app.add_route("/metrics", handle_metrics)
 
