@@ -6,7 +6,7 @@ import os
 from runner import on_message
 from aio_pika import connect
 from functools import partial
-from runner import on_message, wait_for_rabbitmq_startup
+from runner import on_message, wait_for_rabbitmq_startup, configure_errors_exchange
 from starlette_exporter import PrometheusMiddleware, handle_metrics
 
 
@@ -32,9 +32,11 @@ async def main():
     channel = await connection.channel()
     await channel.set_qos(prefetch_count=1)
     
+    errors_exchange = await configure_errors_exchange(channel)
+
     for protocol in PROTOCOLS: 
         queue = await channel.declare_queue(f"{DLX_QUEUE}.{protocol}", durable=True)
-        await queue.consume(partial(on_message))
+        await queue.consume(partial(on_message, channel, errors_exchange))
 
 @app.on_event("startup")
 async def startup_event():
