@@ -35,8 +35,8 @@ async def on_message_route_it(channel: Channel, exchange: Exchange, message: Inc
         if recipient.scheme == "sge":
             recipient_queue_name = f"routing.{recipient.address}.{protocol}"
             queue = await channel.declare_queue(recipient_queue_name, durable=True, arguments={
-        "x-dead-letter-exchange" : "dlx",
-        })
+                "x-dead-letter-exchange" : "dlx",
+            })
             await queue.bind(exchange, routing_key=recipient_queue_name)
             await exchange.publish(routing_message, routing_key=recipient_queue_name)
 
