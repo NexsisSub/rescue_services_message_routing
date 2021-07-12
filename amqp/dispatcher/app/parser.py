@@ -37,8 +37,11 @@ def get_protocol_from_xml(xml):
         message =  get_xml_from_tag_name(xml=xml, tag="message")[0]
         protocol = message.getAttribute("xmlns").split(":")[-2:-1][0]
     except:
-        pass
-    return protocol
+        message =  get_xml_from_tag_name(xml=xml, tag="emsi")[0]
+        print(message.getAttribute("xmlns"))
+        protocol = message.getAttribute("xmlns").split("/")[-2:-1][0]
+
+    return protocol.lower()
 
 
 

@@ -47,8 +47,8 @@ async def on_message(channel: Channel, exchange: Exchange, db: Session, message:
     try:
         await on_message_route_it(channel=channel, exchange=exchange, message=message)
         create_event(db=db, event=EventSchema(raw=message.body.decode(), status="success", routed_at=routed_at))
-    except:
-        create_event(db=db, event=EventSchema(raw=message.body.decode(), status="failed", routed_at=routed_at))
+    except Exception as e:
+        create_event(db=db, event=EventSchema(raw=message.body.decode(), status="failed", routed_at=routed_at, reason=str(e)))
     finally:
         await message.ack()
     

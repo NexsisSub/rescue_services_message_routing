@@ -1,2 +1,3 @@
 aio_pika
 starlette_exporter
+Jinja2

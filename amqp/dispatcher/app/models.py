@@ -15,3 +15,4 @@ class Event(Base):
     routed_at = Column(DateTime())
     raw = Column(String)
     status = Column(String)
+    reason = Column(String)

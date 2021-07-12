@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<edxlDistribution xlink:type="extended"
+                  xmlns="urn:oasis:names:tc:emergency:EDXL:DE:2.0"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                  xmlns:ct="urn:oasis:names:tc:emergency:edxl:ct:1.0">
+  <distributionID>21b36a36-717b-4eba-bbc1-8e027624fe2f</distributionID>
+  <senderID>{{ sender_id }}</senderID>
+  <dateTimeSent>2020-03-05T14:06:54+00:00</dateTimeSent>
+  <dateTimeExpires>2070-03-05T14:06:54+00:00</dateTimeExpires>
+  <distributionStatus>Actual</distributionStatus>
+  <distributionKind>Error</distributionKind>
+  <descriptor xlink:type="resource">
+    <language>fr-FR</language>
+    <explicitAddress>
+      <explicitAddressScheme>sge</explicitAddressScheme>
+      <explicitAddressValue>{{ receiver_id }}</explicitAddressValue>
+    </explicitAddress>
+  </descriptor>
+  <content xlink:type="resource">
+    <contentObject xlink:type="resource">
+      <contentDescriptor>
+        <contentKeyword>
+          <ct:ValueListURI>nexsis-sge::contenu::type</ct:ValueListURI>
+          <ct:Value>Error</ct:Value>
+        </contentKeyword>
+      </contentDescriptor>
+      <otherContent>
+        <mimeType>application/json</mimeType>
+        <contentData>
+          {{ content }}
+        </contentData>
+      </otherContent>
+    </contentObject>
+  </content>
+</edxlDistribution>

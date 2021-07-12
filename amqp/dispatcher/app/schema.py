@@ -10,6 +10,7 @@ class Event(BaseModel):
     routed_at: datetime
     raw: str 
     status: str
+    reason: str = None
 
     class Config:
         orm_mode = True

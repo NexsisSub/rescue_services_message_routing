@@ -5,7 +5,11 @@ import os
 from functools import partial
 from datetime import datetime
 from parser import get_sender_and_protocol_from_edxl_string, Sender
+from jinja2 import Environment, FileSystemLoader
+import base64
 
+content = 'This is about page'
+env = Environment(loader=FileSystemLoader('templates'))
 
 ERRORS_EXCHANGE  = os.environ.get("ERRORS_EXCHANGE")
 
@@ -15,9 +19,15 @@ async def on_message_print(message: IncomingMessage):
 
 async def on_message_route_it_to_client_error_queue(channel: Channel, exchange: Exchange, message: IncomingMessage):
     edxl_xml_string = message.body.decode()
+    receiver_routing_key = message.routing_key
     sender: Sender = get_sender_and_protocol_from_edxl_string(edxl_xml_string)
+    message_content = build_error_message(
+        sender_id=receiver_routing_key.split(".")[1], ## TODO: get properly sender_id
+        receiver_id=sender.name,
+        content=base64.b64encode(message.body).decode()
+    )
     error_message = Message(
-        f"error from queue {message.routing_key}".encode(),
+        message_content.encode(),
         delivery_mode=DeliveryMode.PERSISTENT,
         expiration=None
     )
@@ -26,10 +36,20 @@ async def on_message_route_it_to_client_error_queue(channel: Channel, exchange: 
     await queue.bind(exchange, routing_key=recipient_queue_name)
     await exchange.publish(error_message, routing_key=recipient_queue_name)
 
+
 async def on_message(channel: Channel, exchange: Exchange, message: IncomingMessage):
-    await on_message_print(message)
-    await on_message_route_it_to_client_error_queue(channel=channel, exchange=exchange, message=message)
-    await message.ack()
+    try:
+        await on_message_print(message)
+        await on_message_route_it_to_client_error_queue(channel=channel, exchange=exchange, message=message)
+    except Exception as e:
+        print(e)
+    finally:
+        await message.ack()
+
+def build_error_message(sender_id: str, receiver_id: str, content: str):
+    template = env.get_template('error.xml')
+    output = template.render(sender_id=sender_id, receiver_id=receiver_id, content=content)
+    return output
 
 
 async def configure_errors_exchange(channel):
