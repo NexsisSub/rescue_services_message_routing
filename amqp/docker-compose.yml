@@ -69,7 +69,28 @@ services:
       - .env
     ports:
       - 8882:8882
+      
+  http-worker:
+    build: 
+      context: http-worker
+      dockerfile: Dockerfile
+    volumes:
+        - ./http-worker/app:/app
+    networks: ["sgenet"]
+    env_file: 
+      - .env
+    ports:
+      - 8884:8884
 
+  my-http-listener:
+    image: mendhak/http-https-echo:18
+    environment: 
+        - HTTP_PORT=8890
+        - HTTPS_PORT=8891
+    ports:
+        - "8080:8890"
+        - "8443:8891"
+  
   # event-logger:
   #   build: 
   #     context: event-logger

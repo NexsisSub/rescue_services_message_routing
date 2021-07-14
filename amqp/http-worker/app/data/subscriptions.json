@@ -1,0 +1,102 @@
+[
+  {
+    "nom": "Les pompiers de Seine-et-Marne",
+    "code": "pompiers-77",
+    "famille": "SECOURS",
+    "adresses": [
+      {
+        "protocole": "sge:",
+        "valeur": "77-cgo"
+      }
+    ],
+    "codeUniteFonctionnelle": "77-cgo"
+  },
+  {
+    "nom": "La police de Seine-et-Marne",
+    "code": "police-77",
+    "famille": "ORDRE",
+    "adresses": [
+      {
+        "protocole": "sge:",
+        "valeur": "sgo-police-77"
+      },
+      {
+        "protocole": "tel:",
+        "valeur": "1032",
+        "label": "Standard police"
+      },
+      {
+        "protocole": "tel:",
+        "valeur": "1036",
+        "label": "Office de permanence"
+      }
+    ],
+    "codeUniteFonctionnelle": "police-77",
+    "codeIntervenantTuteur": "pompiers-77"
+  },
+  {
+    "nom": "Le bon samaritain de Seine-et-Marne",
+    "code": "bon-samaritain-77",
+    "famille": "SECOURS",
+    "adresses": [
+      {
+        "protocole": "sge:",
+        "valeur": "sgo-bon-samaritain"
+      }
+    ],
+    "codeUniteFonctionnelle": "bon-samaritain-77",
+    "codeIntervenantTuteur": "pompiers-77"
+  },
+  {
+    "nom": "Intervenant gmasc",
+    "code": "gmasc",
+    "famille": "SECOURS",
+    "adresses": [
+      {
+        "protocole": "sge:",
+        "valeur": "gmasc"
+      }
+    ],
+    "codeUniteFonctionnelle": "gmasc",
+    "codeIntervenantTuteur": "pompiers-77"
+  },
+  {
+    "nom": "La gendarmerie de Seine-et-Marne",
+    "code": "gendarmerie-77",
+    "famille": "ORDRE",
+    "adresses": [
+      {
+        "protocole": "sge:",
+        "valeur": "sgo-gendarmerie-77"
+      },
+      {
+        "protocole": "tel:",
+        "valeur": "1033"
+      },
+      {
+        "protocole": "tel:",
+        "valeur": "1052"
+      }
+    ],
+    "codeUniteFonctionnelle": "gendarmerie-77",
+    "codeIntervenantTuteur": "pompiers-77"
+  },
+  {
+    "nom": "Le samu de Seine-et-Marne",
+    "code": "samu-77",
+    "famille": "SECOURS",
+    "adresses": [
+      {
+        "protocole": "sge:",
+        "valeur": "sgo-samu-77"
+      },
+      {
+        "protocole": "tel:",
+        "valeur": "1031",
+        "label": "Standard samu"
+      }
+    ],
+    "codeUniteFonctionnelle": "samu-77",
+    "codeIntervenantTuteur": "pompiers-77"
+  }
+]

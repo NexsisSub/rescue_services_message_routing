@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<edxlDistribution xlink:type="extended"
+                  xmlns="urn:oasis:names:tc:emergency:EDXL:DE:2.0"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                  xmlns:ct="urn:oasis:names:tc:emergency:edxl:ct:1.0">
+  <distributionID>6e4905df-2b75-4c73-965d-25f25e9b9517</distributionID>
+  <senderID>sgo-77</senderID>
+  <dateTimeSent>2020-04-06T12:00:50+00:00</dateTimeSent>
+  <dateTimeExpires>2070-04-06T12:00:50+00:00</dateTimeExpires>
+  <distributionStatus>Actual</distributionStatus>
+  <distributionKind>Report</distributionKind>
+  <descriptor xlink:type="resource">
+    <language>fr-FR</language>
+    <explicitAddress>
+      <explicitAddressScheme>sge</explicitAddressScheme>
+      <explicitAddressValue>sga-nexsis</explicitAddressValue>
+    </explicitAddress>
+  </descriptor>
+  <content xlink:type="resource">
+    <contentObject xlink:type="resource">
+      <contentXML>
+        <embeddedXMLContent>
+          <emsi xmlns="http://tacticalsituationobject.org/schemas/EMSI/3_0">
+            <context>
+              <!-- Identifiant unique du message -->
+              <id>1c49fe97-f370-458a-b1ad-897a34362006</id>
+              <mode>ACTUAL</mode>
+              <msgType>ALERT</msgType>
+              <creation>2020-04-06T12:00:50+00:00</creation>
+              <origin>
+                <!-- Identifiant unique de l'organisation et du noeud (voir les PO) -->
+                <org_id>sgo-77</org_id>
+                <name>SDIS de Seine-et-Marne</name>
+              </origin>
+            </context>
+            <event>
+              <!-- Identifiant de l'opération -->
+              <id>7724fe68-0110-44ee-89ed-b25418441c41</id>
+              <!-- Identifiant de l'affaire -->
+              <main_event_id>111fb03a-6fd9-41e0-8e81-990c45188888</main_event_id>
+              <!-- Date d'envoi/validation du premier échelon' -->
+              <decl_datetime>2020-04-06T12:02:50+00:00</decl_datetime>
+              <!-- date de création l'affaire -->
+              <occ_datetime>2020-04-06T12:02:50+00:00</occ_datetime>
+              <!-- L'affaire/opération est démarrée -->
+              <status>IPR</status>
+              <!-- Localisation de la destination de l'échelon -->
+              <egeo>
+                <type>GEN</type>
+                <position>
+                  <loc_id>8ccd59de-74fd-11ea-bc55-0242ac130003</loc_id>
+                  <name>Église Saint-Michel de Lille</name>
+                  <type>POINT</type>
+                  <coordsys>EPSG-4326</coordsys>
+                  <height_role>AVE</height_role>
+                  <coord>
+                    <lat>50.6260471</lat>
+                    <lon>3.057965</lon>
+                  </coord>
+                  <address>2 Rue des Pyramides, 59000 Lille</address>
+                  <address>J3G6+RG Lille</address>
+                </position>
+              </egeo>
+            </event>
+          </emsi>
+        </embeddedXMLContent>
+      </contentXML>
+    </contentObject>
+  </content>
+</edxlDistribution>
