@@ -6,7 +6,8 @@ import os
 from runner import on_message
 from aio_pika import connect
 from functools import partial
-from runner import on_message, wait_for_rabbitmq_startup, configure_errors_exchange
+from parser import parse_subsucriptions
+from runner import on_message, wait_for_rabbitmq_startup
 from starlette_exporter import PrometheusMiddleware, handle_metrics
 
 
@@ -25,18 +26,7 @@ app = FastAPI(
 app.add_middleware(PrometheusMiddleware)
 app.add_route("/metrics", handle_metrics)
 
-subscriptions = {
-    "sgo-77":{
-        "uri":"http://localhost:8080/sgo-77"
-    },
-    "cga-pompier-sdis77":{
-        "uri":"http://localhost:8080/sgo-77"
-    },
-    "sga-nexsis":{
-        "uri":"http://localhost:8080/sga-nexsis"
-    }
-}
-
+subscriptions = parse_subsucriptions()
 
 async def main():    
     print("starting main ")

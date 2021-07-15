@@ -1,5 +1,15 @@
 import xml.dom.minidom
 
+class Sender:
+    def __init__(self, name):
+        self.name = name
+
+    @classmethod
+    def from_xml(cls, xml):
+        name = get_data_from_tag_name(xml, "senderID")
+        return cls(name= name)
+
+
 class Recipient:
     def __init__(self, scheme, address):
         self.scheme = scheme
@@ -22,9 +32,13 @@ def get_xml_from_tag_name(xml, tag):
     return xml.getElementsByTagName(tag)
 
 
+def get_sender_from_xml(xml):
+    sender = Sender.from_xml(xml)
+    return sender
+
 def get_recipients_and_protocol_from_edxl_string(xml_string):
     dom = xml.dom.minidom.parseString(xml_string)
-    return get_recipients_from_xml(dom) , get_protocol_from_xml(dom)
+    return get_recipients_from_xml(dom), get_sender_from_xml(dom), get_protocol_from_xml(dom)
 
 def get_recipients_from_xml(xml):
     tags = get_xml_from_tag_name(xml=xml, tag="explicitAddress")

@@ -19,19 +19,20 @@ async def on_message_print(message: IncomingMessage):
 
 async def on_message_route_it_to_client_error_queue(channel: Channel, exchange: Exchange, message: IncomingMessage):
     edxl_xml_string = message.body.decode()
-    receiver_routing_key = message.routing_key
-    sender: Sender = get_sender_and_protocol_from_edxl_string(edxl_xml_string)
+    sender: str = message.headers["sender"]
+    receiver: str = message.headers["receiver"]
     message_content = build_error_message(
-        sender_id=receiver_routing_key.split(".")[1], ## TODO: get properly sender_id
-        receiver_id=sender.name,
+        sender_id=receiver,
+        receiver_id=sender,
         content=base64.b64encode(message.body).decode()
     )
+
     error_message = Message(
         message_content.encode(),
         delivery_mode=DeliveryMode.PERSISTENT,
         expiration=None
     )
-    recipient_queue_name = f"errors.{sender.name}.messaging"
+    recipient_queue_name = f"errors.{sender}.messaging"
     queue = await channel.declare_queue(recipient_queue_name, durable=True)
     await queue.bind(exchange, routing_key=recipient_queue_name)
     await exchange.publish(error_message, routing_key=recipient_queue_name)

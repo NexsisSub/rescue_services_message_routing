@@ -90,6 +90,8 @@ services:
     ports:
         - "8080:8890"
         - "8443:8891"
+    networks: ["sgenet"]
+
   
   # event-logger:
   #   build: 

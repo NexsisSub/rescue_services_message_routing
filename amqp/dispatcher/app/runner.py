@@ -23,14 +23,21 @@ async def on_message_print(message: IncomingMessage):
 
 async def on_message_route_it(channel: Channel, exchange: Exchange, message: IncomingMessage):
     edxl_xml_string = message.body.decode()
-    recipients, protocol = get_recipients_and_protocol_from_edxl_string(edxl_xml_string) 
+    recipients, sender, protocol = get_recipients_and_protocol_from_edxl_string(edxl_xml_string) 
 
-    routing_message = Message(
-        message.body,
-        delivery_mode=DeliveryMode.PERSISTENT,
-        expiration=message.headers.get("ttl")
-    )
+
     for recipient in recipients:
+        routing_message = Message(
+            message.body,
+            delivery_mode=DeliveryMode.PERSISTENT,
+            expiration=message.headers.get("ttl"),
+            headers={
+                "receiver":recipient.address,
+                "sender": sender.name,
+                "recipients": [recipient.address for recipient in recipients], 
+                "protocol": protocol
+            }
+        )
         print(f"Routing to {recipient.address}")
         if recipient.scheme == "sge":
             recipient_queue_name = f"routing.{recipient.address}.{protocol}"

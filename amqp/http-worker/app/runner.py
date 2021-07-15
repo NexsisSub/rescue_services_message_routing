@@ -4,13 +4,8 @@ from aio_pika import connect, IncomingMessage, ExchangeType, Message, DeliveryMo
 import os 
 from functools import partial
 from datetime import datetime
-from parser import get_sender_and_protocol_from_edxl_string, Sender
 import base64
-import requests
-
-
-content = 'This is about page'
-env = Environment(loader=FileSystemLoader('templates'))
+import aiohttp
 
 ROUTING_EXCHANGE  = os.environ.get("ROUTING_EXCHANGE")
 
@@ -19,15 +14,20 @@ PROTOCOLS = os.environ.get("PROTOCOLS", "cisu/emsi").split("/")
 async def on_message_print(message: IncomingMessage):
     print(f"[->] Received erro message dlx data from {message.routing_key}")
 
+async def make_get_requests_and_print_results(uri):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(uri) as resp:
+            response = await resp.json()
+            print(response["path"])
+        
+
 async def on_message_send_it_to_client(subscriptions: dict, message: IncomingMessage):
     edxl_xml_string = message.body.decode()
-    recipients, protocol = get_recipients_and_protocol_from_edxl_string(edxl_xml_string) 
+    receiver = message.headers["receiver"]
+    subscription = subscriptions.get(receiver)
+    uri = subscription["uri"] if subscription else "http://my-http-listener:8890/not-found"        
+    await make_get_requests_and_print_results(uri)
 
-    subscription = subscriptions.get(recipients[0].address)
-    if subscription: 
-        uri = subscription["uri"]
-        response = requests.get(uri)
-        print(response.json())
 
 async def on_message(subscriptions: dict, message: IncomingMessage):
     await on_message_print(message)

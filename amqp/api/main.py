@@ -9,10 +9,11 @@ tornado.ioloop.IOLoop.configure("tornado.platform.asyncio.AsyncIOLoop")
 io_loop = tornado.ioloop.IOLoop.current()
 asyncio.set_event_loop(io_loop.asyncio_loop)
 
-DISTRIBUTION_EXCHANGE = os.environ.get("MAIN_EXCHANGE", "distribution")
-DISTRIBUTION_ROUTING_KEY = os.environ.get("DISTRIBUTION_ROUTING_KEY", "distribution")
-DISTRIBUTION_QUEUE = os.environ.get("DISTRIBUTION_QUEUE", "distribution")
-ROUTING_EXCHANGE = os.environ.get("ROUTING_EXCHANGE", "routing")
+DISTRIBUTION_EXCHANGE = os.environ.get("DISTRIBUTION_EXCHANGE")
+DISTRIBUTION_ROUTING_KEY = os.environ.get("DISTRIBUTION_ROUTING_KEY")
+DISTRIBUTION_QUEUE = os.environ.get("DISTRIBUTION_QUEUE")
+ROUTING_EXCHANGE = os.environ.get("ROUTING_EXCHANGE")
+DEFAULT_TTL = int(os.environ.get("DEFAULT_TTL", 30))
 
 AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@rabbitmq:5672/")
 
@@ -28,7 +29,7 @@ class PublisherHandler(tornado.web.RequestHandler):
         distribution_queue = yield channel.declare_queue(DISTRIBUTION_QUEUE, durable=True)
         try:
             yield distribution_exchange.publish(
-                Message(body=self.request.body,  headers={"ttl":10}), routing_key=DISTRIBUTION_ROUTING_KEY,
+                Message(body=self.request.body,  headers={"ttl":DEFAULT_TTL}), routing_key=DISTRIBUTION_ROUTING_KEY,
             )
         finally:
             yield channel.close()
