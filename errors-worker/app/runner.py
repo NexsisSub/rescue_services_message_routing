@@ -15,7 +15,7 @@ ERRORS_EXCHANGE  = os.environ.get("ERRORS_EXCHANGE")
 
 
 async def on_message_print(message: IncomingMessage):
-    print(f"[->] Received erro message dlx data from {message.routing_key}")
+    print(f"[->] Received error message dlx data from {message.routing_key}")
 
 async def on_message_route_it_to_client_error_queue(channel: Channel, exchange: Exchange, message: IncomingMessage):
     edxl_xml_string = message.body.decode()

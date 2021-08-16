@@ -8,7 +8,7 @@ def parse_subsucriptions():
     subscriptions = {
         sub["adresses"][0]["valeur"]:{
             **sub, **{
-                "uri":f"http://my-http-listener:8890/{sub['adresses'][0]['valeur']}"
+                "uri":f"http://http-listener:8890/{sub['adresses'][0]['valeur']}"
             }
         } 
         for sub in subscriptions

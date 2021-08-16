@@ -12,7 +12,7 @@ ROUTING_EXCHANGE  = os.environ.get("ROUTING_EXCHANGE")
 PROTOCOLS = os.environ.get("PROTOCOLS", "cisu/emsi").split("/")
 
 async def on_message_print(message: IncomingMessage):
-    print(f"[->] Received erro message dlx data from {message.routing_key}")
+    print(f"[->] Received error message dlx data from {message.routing_key}")
 
 async def make_get_requests_and_print_results(uri):
     async with aiohttp.ClientSession() as session:
@@ -25,7 +25,7 @@ async def on_message_send_it_to_client(subscriptions: dict, message: IncomingMes
     edxl_xml_string = message.body.decode()
     receiver = message.headers["receiver"]
     subscription = subscriptions.get(receiver)
-    uri = subscription["uri"] if subscription else "http://my-http-listener:8890/not-found"        
+    uri = subscription["uri"] if subscription else "http://http-listener:8890/not-found"        
     await make_get_requests_and_print_results(uri)
 
 

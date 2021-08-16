@@ -1,9 +1,24 @@
-# Exchange routing system for rescue services
+# AMQP version
 
-Elasticsearch + Kibana
-
-## AMQP -> RabbitMQ
+## Architecture
 
 ![Archi](architecture.png)
 
-## NATS
+## Installation
+
+Install Docker and docker-compose (legacy for linux only)
+
+## Run
+
+```bash
+make run
+make config
+```
+# SGE endpoints
+
+[Publish](docs/publish.md)
+
+[Elastic](docs/elastic.md)
+
+[RabbitMQ](docs/rabbit.md)
+
