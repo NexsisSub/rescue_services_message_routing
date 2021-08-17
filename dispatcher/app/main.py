@@ -3,7 +3,7 @@ from fastapi import FastAPI
 import json
 import asyncio
 import os
-from runner import on_message, configure_routing_exchange, wait_for_rabbitmq_startup
+from runner import on_message, configure_routing_exchange
 from aio_pika import connect
 from functools import partial
 from starlette_exporter import PrometheusMiddleware, handle_metrics

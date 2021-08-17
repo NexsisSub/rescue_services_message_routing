@@ -7,7 +7,7 @@ from runner import on_message
 from aio_pika import connect
 from functools import partial
 from parser import SubScriptions, SubScription
-from runner import on_message, wait_for_rabbitmq_startup
+from runner import on_message
 from starlette_exporter import PrometheusMiddleware, handle_metrics
 
 

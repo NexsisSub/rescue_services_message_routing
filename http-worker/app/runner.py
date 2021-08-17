@@ -38,19 +38,3 @@ async def on_message(subscriptions: SubScriptions, message: IncomingMessage):
         print(e)
     finally:
         await message.ack()
-
-
-
-async def wait_for_rabbitmq_startup(amqp_uri):
-    print("wait_for_rabbitmq_startup")
-    http_uri = amqp_uri.replace("5672/", "15672/api/aliveness-test/%2F").replace("amqp", "http")
-    is_up = False
-
-    while not is_up:
-        try:
-            connection = await connect(amqp_uri)
-            is_up = True
-        except Exception as e:
-            print(e)
-        asyncio.sleep(5)
-    return True

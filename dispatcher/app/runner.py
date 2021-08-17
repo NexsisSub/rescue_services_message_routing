@@ -64,17 +64,3 @@ async def on_message(channel: Channel, exchange: Exchange, db: Session, message:
 async def configure_routing_exchange(channel):
     routing_exchange = await channel.declare_exchange(ROUTING_EXCHANGE, ExchangeType.TOPIC)
     return routing_exchange
-
-async def wait_for_rabbitmq_startup(amqp_uri):
-    print("wait_for_rabbitmq_startup")
-    is_up = False
-
-    while not is_up:
-        try:
-            connection = await connect(amqp_uri)
-            is_up = True
-        except Exception as e:
-            print(e)
-            print("Rabbit Is Not UP")
-        await asyncio.sleep(5)
-    return True

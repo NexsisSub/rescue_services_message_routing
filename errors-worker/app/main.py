@@ -6,7 +6,7 @@ import os
 from runner import on_message
 from aio_pika import connect
 from functools import partial
-from runner import on_message, wait_for_rabbitmq_startup, configure_errors_exchange
+from runner import on_message, configure_errors_exchange
 from starlette_exporter import PrometheusMiddleware, handle_metrics
 
 
@@ -27,7 +27,6 @@ app.add_route("/metrics", handle_metrics)
 
 async def main():    
     print("starting main ")
-    await wait_for_rabbitmq_startup(AMQP_URI)
     connection = await connect(AMQP_URI)
     channel = await connection.channel()
     await channel.set_qos(prefetch_count=1)
