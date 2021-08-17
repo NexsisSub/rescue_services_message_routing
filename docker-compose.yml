@@ -1,0 +1,150 @@
+version: "3.5"
+services:
+
+####################################
+# Data layer
+
+  postgres:
+    image: postgres
+    container_name: sge_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+    ports:
+      - "5432:5432"
+    networks: ["sgenet"]
+    restart: unless-stopped
+    env_file: 
+      - .env
+
+  rabbitmq:
+      image: rabbitmq:3-management-alpine
+      container_name: sge_rabbitmq
+      env_file:
+        - .env 
+      ports:
+        - 5672:5672
+        - 15672:15672
+      networks: ["sgenet"]
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.13.1
+    container_name: sge_elastic
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+    networks: ["sgenet"]
+
+####################################
+
+####################################
+# SGE HUB
+
+  dispatcher:
+    build: 
+      context: dispatcher
+      dockerfile: Dockerfile
+    container_name: sge_dispatcher
+    networks: ["sgenet"]
+    volumes:
+      - ./dispatcher/app:/app
+    env_file: 
+      - .env
+    ports:
+      - 8881:8881
+    command: /scripts/wait-for-it.sh ${AMQP_HOST} -s --timeout=30  -- /scripts/wait-for-it.sh postgres:5432 -- uvicorn main:app --host 0.0.0.0 --port 8881 --reload
+
+  errors-worker:
+    build: 
+      context: errors-worker
+      dockerfile: Dockerfile
+    container_name: sge_errors
+    volumes:
+        - ./errors-worker/app:/app
+    networks: ["sgenet"]
+    env_file: 
+      - .env
+    ports:
+      - 8882:8882
+    command: /scripts/wait-for-it.sh ${AMQP_HOST} -s --timeout=30  -- uvicorn main:app --host 0.0.0.0 --port 8882 --reload
+
+####################################
+
+####################################
+# event-hub
+
+  event-logger:
+    build: 
+      context: event-logger
+      dockerfile: Dockerfile
+    container_name: sge_event_logger
+    networks: ["sgenet"]
+    env_file: 
+      - .env
+    ports:
+      - 8883:8883
+    volumes:
+      - ./event-logger/app:/app
+
+    command: /scripts/wait-for-it.sh ${AMQP_HOST} -s --timeout=30  -- /scripts/wait-for-it.sh ${ELASTIC_URI} -- uvicorn main:app --host 0.0.0.0 --port 8883 --reload
+
+####################################
+
+####################################
+# simulate actual sge over API REST 
+
+# entrée
+  web-api:
+    build: 
+      context: web-api
+      dockerfile: Dockerfile
+    container_name: sge_web_api
+    networks: ["sgenet"]
+    env_file: 
+      - .env
+    ports:
+      - 8888:8888
+    command : /scripts/wait-for-it.sh ${AMQP_HOST} -s --timeout=30  -- python main.py
+#Sortie  
+  http-worker:
+    build: 
+      context: http-worker
+      dockerfile: Dockerfile
+    container_name: sge_http_worker
+    volumes:
+        - ./http-worker/app:/app
+    networks: ["sgenet"]
+    env_file: 
+      - .env
+    ports:
+      - 8884:8884
+    command: /scripts/wait-for-it.sh ${AMQP_HOST} -s --timeout=30  -- uvicorn main:app --host 0.0.0.0 --port 8884 --reload
+
+####################################
+
+####################################
+# Client
+
+  http-listener:
+    image: mendhak/http-https-echo:18
+    container_name: sge_client
+    environment: 
+        - HTTP_PORT=8890
+        - HTTPS_PORT=8891
+    ports:
+        - "8080:8890"
+        - "8443:8891"
+    networks: ["sgenet"]
+    
+
+
+networks:
+  sgenet:
+    name: sgenet

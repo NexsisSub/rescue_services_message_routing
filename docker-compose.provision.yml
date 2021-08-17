@@ -1,0 +1,13 @@
+version: "3.5"
+services:
+  provision:
+    build: 
+      context: provision
+      dockerfile: Dockerfile
+    networks: ["sgenet"]
+    env_file: 
+      - .env
+
+networks:
+  sgenet:
+    external: true
