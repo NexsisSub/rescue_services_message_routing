@@ -30,7 +30,6 @@ subscriptions: SubScriptions =  SubScriptions.from_json_file("data/subscriptions
 
 async def main():    
     print("starting main ")
-    await wait_for_rabbitmq_startup(AMQP_URI)
     connection = await connect(AMQP_URI)
     channel = await connection.channel()
     await channel.set_qos(prefetch_count=1)

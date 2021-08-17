@@ -29,7 +29,8 @@
         "label": "Standard police"
       }, {
         "protocole": "http:",
-        "valeur": "http://http-listener:8890/police-77/echanges"      }
+        "valeur": "http://http-listener:8890/police-77/echanges"    
+      }
     ],
     "codeUniteFonctionnelle": "police-77",
     "codeIntervenantTuteur": "pompiers-77"
