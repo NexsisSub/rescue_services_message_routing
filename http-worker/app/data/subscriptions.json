@@ -7,6 +7,9 @@
       {
         "protocole": "sge:",
         "valeur": "77-cgo"
+      }, {
+        "protocole": "http:",
+        "valeur": "http://http-listener:8890/pompiers-77/echanges"
       }
     ],
     "codeUniteFonctionnelle": "77-cgo"
@@ -24,12 +27,9 @@
         "protocole": "tel:",
         "valeur": "1032",
         "label": "Standard police"
-      },
-      {
-        "protocole": "tel:",
-        "valeur": "1036",
-        "label": "Office de permanence"
-      }
+      }, {
+        "protocole": "http:",
+        "valeur": "http://http-listener:8890/police-77/echanges"      }
     ],
     "codeUniteFonctionnelle": "police-77",
     "codeIntervenantTuteur": "pompiers-77"
@@ -42,22 +42,12 @@
       {
         "protocole": "sge:",
         "valeur": "sgo-bon-samaritain"
-      }
+      }, {
+        "protocole": "http:",
+        "valeur": "http://http-listener:8890/bon-samaritain-77/echanges"   
+         }
     ],
     "codeUniteFonctionnelle": "bon-samaritain-77",
-    "codeIntervenantTuteur": "pompiers-77"
-  },
-  {
-    "nom": "Intervenant gmasc",
-    "code": "gmasc",
-    "famille": "SECOURS",
-    "adresses": [
-      {
-        "protocole": "sge:",
-        "valeur": "gmasc"
-      }
-    ],
-    "codeUniteFonctionnelle": "gmasc",
     "codeIntervenantTuteur": "pompiers-77"
   },
   {
@@ -76,7 +66,10 @@
       {
         "protocole": "tel:",
         "valeur": "1052"
-      }
+      }, {
+        "protocole": "http:",
+        "valeur": "http://http-listener:8890/gendarmerie-77/echanges"   
+         }
     ],
     "codeUniteFonctionnelle": "gendarmerie-77",
     "codeIntervenantTuteur": "pompiers-77"
@@ -94,7 +87,26 @@
         "protocole": "tel:",
         "valeur": "1031",
         "label": "Standard samu"
-      }
+      }, {
+        "protocole": "http:",
+        "valeur": "http://http-listener:8890/samu-77/echanges"
+            }
+    ],
+    "codeUniteFonctionnelle": "samu-77",
+    "codeIntervenantTuteur": "pompiers-77"
+  },
+  {
+    "nom": "Enki Gestion de crise",
+    "code": "sgc-enki",
+    "famille": "AUTHORITE",
+    "adresses": [
+      {
+        "protocole": "sge:",
+        "valeur": "sgc-enki"
+      },{
+        "protocole": "http:",
+        "valeur": "http://http-listener:8890/enki/echanges"
+            }
     ],
     "codeUniteFonctionnelle": "samu-77",
     "codeIntervenantTuteur": "pompiers-77"

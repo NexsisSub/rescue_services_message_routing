@@ -6,7 +6,7 @@ import os
 from runner import on_message
 from aio_pika import connect
 from functools import partial
-from parser import parse_subsucriptions
+from parser import SubScriptions, SubScription
 from runner import on_message, wait_for_rabbitmq_startup
 from starlette_exporter import PrometheusMiddleware, handle_metrics
 
@@ -26,7 +26,7 @@ app = FastAPI(
 app.add_middleware(PrometheusMiddleware)
 app.add_route("/metrics", handle_metrics)
 
-subscriptions = parse_subsucriptions()
+subscriptions: SubScriptions =  SubScriptions.from_json_file("data/subscriptions.json")
 
 async def main():    
     print("starting main ")
@@ -34,9 +34,14 @@ async def main():
     connection = await connect(AMQP_URI)
     channel = await connection.channel()
     await channel.set_qos(prefetch_count=1)
-    for protocol in PROTOCOLS: 
-        queue = await channel.declare_queue(f"routing.all.{protocol}", durable=True)
-        await queue.consume(partial(on_message, subscriptions))
+    await configure_reception_queues_worker(channel=channel,subscriptions=subscriptions)
+    
+async def configure_reception_queues_worker(channel, subscriptions: SubScriptions):
+    for subscription in subscriptions.http_subscriptions:
+        for protocol in PROTOCOLS: 
+            queue = await channel.declare_queue(f"routing.{subscription.sge_name}.{protocol}", durable=True)
+            await queue.consume(partial(on_message, subscriptions))
+
 
 @app.on_event("startup")
 async def startup_event():

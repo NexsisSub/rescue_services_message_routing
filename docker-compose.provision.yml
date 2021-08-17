@@ -1,15 +1,5 @@
 version: "3.5"
 services:
-  publisher:
-    build: 
-      context: publisher
-      dockerfile: Dockerfile
-    networks: ["sgenet"]
-    profiles:
-      - donotstart
-    env_file: 
-      - .env
-
   provision:
     build: 
       context: provision
@@ -17,8 +7,6 @@ services:
     networks: ["sgenet"]
     env_file: 
       - .env
-    profiles:
-      - donotstart
 
 networks:
   sgenet:

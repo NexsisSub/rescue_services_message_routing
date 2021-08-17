@@ -6,6 +6,8 @@ from functools import partial
 from datetime import datetime
 import base64
 import aiohttp
+from parser import SubScriptions
+
 
 ROUTING_EXCHANGE  = os.environ.get("ROUTING_EXCHANGE")
 
@@ -14,22 +16,21 @@ PROTOCOLS = os.environ.get("PROTOCOLS", "cisu/emsi").split("/")
 async def on_message_print(message: IncomingMessage):
     print(f"[->] Received error message dlx data from {message.routing_key}")
 
-async def make_get_requests_and_print_results(uri):
+async def make_get_requests_and_print_results(uri: str, data):
     async with aiohttp.ClientSession() as session:
-        async with session.get(uri) as resp:
+        async with session.post(uri, data=data) as resp:
             response = await resp.json()
             print(response["path"])
         
 
-async def on_message_send_it_to_client(subscriptions: dict, message: IncomingMessage):
-    edxl_xml_string = message.body.decode()
+async def on_message_send_it_to_client(subscriptions: SubScriptions, message: IncomingMessage):
+    edxl_xml_string = message.body
     receiver = message.headers["receiver"]
-    subscription = subscriptions.get(receiver)
-    uri = subscription["uri"] if subscription else "http://http-listener:8890/not-found"        
-    await make_get_requests_and_print_results(uri)
+    subscription = subscriptions.get_from_sge_name(receiver)
+    await make_get_requests_and_print_results(uri=subscription.webhook, data=edxl_xml_string)
 
 
-async def on_message(subscriptions: dict, message: IncomingMessage):
+async def on_message(subscriptions: SubScriptions, message: IncomingMessage):
     await on_message_print(message)
     try:
         await on_message_send_it_to_client(subscriptions=subscriptions, message=message)
@@ -38,15 +39,6 @@ async def on_message(subscriptions: dict, message: IncomingMessage):
     finally:
         await message.ack()
 
-
-async def configure_routing_exchange(channel):
-    routing_exchange = await channel.declare_exchange(ROUTING_EXCHANGE, ExchangeType.TOPIC)
-
-    for protocol in PROTOCOLS:
-        all_routing_queue = await channel.declare_queue(f"routing.all.{protocol}", durable=True)
-        await all_routing_queue.bind(routing_exchange, routing_key=f"#.{protocol}")
-
-    return routing_exchange
 
 
 async def wait_for_rabbitmq_startup(amqp_uri):

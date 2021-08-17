@@ -16,9 +16,10 @@ DLX_EXCHANGE = os.environ.get("DLX_EXCHANGE", "dlx")
 EVENT_LOGGER_QUEUE = os.environ.get("EVENT_LOGGER_QUEUE", "event_logger")
 AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@localhost:5672/")
 
-
 PROTOCOLS = os.environ.get("PROTOCOLS", "cisu/emsi").split("/")
 
+
+print(AMQP_URI)
 async def configure_distribution_exchange(channel):
     distribution_exchange = await channel.declare_exchange(DISTRIBUTION_EXCHANGE, ExchangeType.TOPIC)
 
@@ -45,12 +46,6 @@ async def configure_dead_letter_exchange(channel):
 
     return dead_letter_exchange
 
-
-async def configure_all_http_queues(channel, routing_exchange):
-    for protocol in PROTOCOLS:
-        all_http_queue = await channel.declare_queue(f"routing.all.{protocol}", durable=True)
-        await all_http_queue.bind(routing_exchange, routing_key=f"routing.#.{protocol}")
-
 async def main(loop):
     # Perform connection
     connection = await connect(AMQP_URI, loop=loop)
@@ -62,7 +57,6 @@ async def main(loop):
     # Declare an exchange
     main_exchange = await configure_distribution_exchange(channel=channel)
     routing_exchange = await configure_routing_exchange(channel=channel)
-    await configure_all_http_queues(channel=channel, routing_exchange=routing_exchange)
     dlx = await configure_dead_letter_exchange(channel=channel)
 
 

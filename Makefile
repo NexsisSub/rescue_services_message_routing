@@ -11,10 +11,7 @@ updc:
 start-db:
 	docker-compose up -d rabbitmq
 	docker-compose up -d postgres
-run: | start-db wait-for-startup config upd
-
-wait-for-startup:
-	sleep 10
+run: | start-db config upd
 build:
 	docker-compose build 
 config:
