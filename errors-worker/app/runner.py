@@ -32,7 +32,7 @@ async def on_message_route_it_to_client_error_queue(channel: Channel, exchange: 
         delivery_mode=DeliveryMode.PERSISTENT,
         expiration=None
     )
-    recipient_queue_name = f"errors.{sender}.messaging"
+    recipient_queue_name = f"messaging.{sender}.errors"
     queue = await channel.declare_queue(recipient_queue_name, durable=True)
     await queue.bind(exchange, routing_key=recipient_queue_name)
     await exchange.publish(error_message, routing_key=recipient_queue_name)

@@ -125,7 +125,7 @@ services:
       - .env
     ports:
       - 8884:8884
-    command: /scripts/wait-for-it.sh ${AMQP_HOST} -s --timeout=30  s-- uvicorn main:app --host 0.0.0.0 --port 8884 --reload
+    command: /scripts/wait-for-it.sh ${AMQP_HOST} -s --timeout=30  -- uvicorn main:app --host 0.0.0.0 --port 8884 --reload
 
 ####################################
 

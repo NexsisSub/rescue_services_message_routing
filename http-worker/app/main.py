@@ -39,7 +39,9 @@ async def main():
 async def configure_reception_queues_worker(channel, subscriptions: SubScriptions):
     for subscription in subscriptions.http_subscriptions:
         for protocol in PROTOCOLS: 
-            queue = await channel.declare_queue(f"routing.{subscription.sge_name}.{protocol}", durable=True)
+            queue = await channel.declare_queue(f"routing.{subscription.sge_name}.{protocol}", durable=True, arguments={
+                "x-dead-letter-exchange" : "dlx",
+            })
             await queue.consume(partial(on_message, subscriptions))
 
 
