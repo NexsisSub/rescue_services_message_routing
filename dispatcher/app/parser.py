@@ -46,6 +46,12 @@ def get_recipients_from_xml(xml):
     return recipients
 
 
+def get_distribution_and_message_id(xml_string):
+    dom = xml.dom.minidom.parseString(xml_string)
+    distributionID = get_data_from_tag_name(dom,"distributionID")
+    messageID = get_data_from_tag_name(dom, "messageId")
+    return distributionID, messageID
+
 def get_protocol_from_xml(xml):
     try:
         message =  get_xml_from_tag_name(xml=xml, tag="message")[0]

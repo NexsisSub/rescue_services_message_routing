@@ -9,7 +9,21 @@
         "valeur": "77-cgo"
       }, {
         "protocole": "http:",
-        "valeur": "http://http-listener:8890/pompiers-77/echanges"
+        "valeur": "http://172.17.0.1:8080/v1/echanges/messages"
+      }
+    ],
+    "codeUniteFonctionnelle": "77-cgo"
+  },  {
+    "nom": "Les pompiers de Seine-et-Marne",
+    "code": "pompiers-77-sfa",
+    "famille": "SECOURS",
+    "adresses": [
+      {
+        "protocole": "sge:",
+        "valeur": "sga-nexsis"
+      }, {
+        "protocole": "http:",
+        "valeur": "http://172.17.0.1:8081/echanges/messages"
       }
     ],
     "codeUniteFonctionnelle": "77-cgo"

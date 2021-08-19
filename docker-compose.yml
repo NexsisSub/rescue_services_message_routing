@@ -42,6 +42,17 @@ services:
       - 9200:9200
     networks: ["sgenet"]
 
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.14.0
+    environment:
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
+
+      - ELASTICSEARCH_HOSTS='["elasticsearch:9200"]'
+    networks: ["sgenet"]
+    ports:
+      - 5601:5601
+
+
 ####################################
 
 ####################################

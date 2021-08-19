@@ -34,6 +34,7 @@ async def main():
     channel = await connection.channel()
     await channel.set_qos(prefetch_count=1)
     await configure_reception_queues_worker(channel=channel,subscriptions=subscriptions)
+    await configure_errors_queues_worker(channel=channel,subscriptions=subscriptions)
     
 async def configure_reception_queues_worker(channel, subscriptions: SubScriptions):
     for subscription in subscriptions.http_subscriptions:
@@ -43,6 +44,10 @@ async def configure_reception_queues_worker(channel, subscriptions: SubScription
             })
             await queue.consume(partial(on_message, subscriptions))
 
+async def configure_errors_queues_worker(channel, subscriptions: SubScriptions):
+    for subscription in subscriptions.http_subscriptions:
+        queue = await channel.declare_queue(f"messaging.{subscription.sge_name}.errors", durable=True)
+        await queue.consume(partial(on_message, subscriptions))
 
 @app.on_event("startup")
 async def startup_event():

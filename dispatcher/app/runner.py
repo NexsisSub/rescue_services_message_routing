@@ -3,7 +3,7 @@ import sys
 from aio_pika import connect, IncomingMessage, ExchangeType, Message, DeliveryMode, Exchange, Channel
 import os 
 from functools import partial
-from parser import get_recipients_and_protocol_from_edxl_string
+from parser import get_recipients_and_protocol_from_edxl_string, get_distribution_and_message_id
 import time
 from sqlalchemy.orm import Session
 from services import create_event
@@ -20,11 +20,10 @@ DISTRIBUTION_QUEUE = os.environ.get("DISTRIBUTION_QUEUE", "distribution")
 async def on_message_print(message: IncomingMessage):
     print(f" [->] Route message : {message.routing_key} ")
 
-
 async def on_message_route_it(channel: Channel, exchange: Exchange, message: IncomingMessage):
     edxl_xml_string = message.body.decode()
     recipients, sender, protocol = get_recipients_and_protocol_from_edxl_string(edxl_xml_string) 
-
+    distributionID, messageID = get_distribution_and_message_id(edxl_xml_string)
 
     for recipient in recipients:
         routing_message = Message(
@@ -34,11 +33,13 @@ async def on_message_route_it(channel: Channel, exchange: Exchange, message: Inc
             headers={
                 "receiver":recipient.address,
                 "sender": sender.name,
-                "recipients": [recipient.address for recipient in recipients], 
-                "protocol": protocol
+                "recipients": [recipient.address for recipient in recipients],
+                "protocol": protocol,
+                "distributionID": distributionID,
+                "messageID": messageID
             }
         )
-        print(f"Routing to {recipient.address}")
+        print(f"Routing to {recipient.scheme}.{recipient.address}")
         if recipient.scheme == "sge":
             recipient_queue_name = f"routing.{recipient.address}.{protocol}"
             queue = await channel.declare_queue(recipient_queue_name, durable=True, arguments={
@@ -46,7 +47,7 @@ async def on_message_route_it(channel: Channel, exchange: Exchange, message: Inc
             })
             await queue.bind(exchange, routing_key=recipient_queue_name)
             await exchange.publish(routing_message, routing_key=recipient_queue_name)
-
+            print(f"Successfully publish message to {recipient_queue_name}")
 
 async def on_message(channel: Channel, exchange: Exchange, db: Session, message: IncomingMessage,):
     routed_at = datetime.now()
@@ -55,6 +56,7 @@ async def on_message(channel: Channel, exchange: Exchange, db: Session, message:
         await on_message_route_it(channel=channel, exchange=exchange, message=message)
         create_event(db=db, event=EventSchema(raw=message.body.decode(), status="success", routed_at=routed_at))
     except Exception as e:
+        print(f"Failed to execute on message because of {e}")
         create_event(db=db, event=EventSchema(raw=message.body.decode(), status="failed", routed_at=routed_at, reason=str(e)))
     finally:
         await message.ack()

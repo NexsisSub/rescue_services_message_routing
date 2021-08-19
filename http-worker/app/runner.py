@@ -18,10 +18,15 @@ async def on_message_print(message: IncomingMessage):
 
 async def make_get_requests_and_print_results(uri: str, data):
     async with aiohttp.ClientSession() as session:
-        async with session.post(uri, data=data) as resp:
-            response = await resp.json()
-            print(response["path"])
-        
+        async with session.post(uri, data=data.decode()) as resp:
+            print(data.decode())
+            print(resp)
+            try:
+                response = await resp.json()
+                print(response)
+            except Exception as e:
+                print(f"Failed to fetch client {e}")
+                
 
 async def on_message_send_it_to_client(subscriptions: SubScriptions, message: IncomingMessage):
     edxl_xml_string = message.body
@@ -34,7 +39,8 @@ async def on_message(subscriptions: SubScriptions, message: IncomingMessage):
     await on_message_print(message)
     try:
         await on_message_send_it_to_client(subscriptions=subscriptions, message=message)
+        print("Successfully send message to client")
     except Exception as e:
-        print(e)
+        print(f"Failed to execute on message because of : {e}")
     finally:
         await message.ack()
