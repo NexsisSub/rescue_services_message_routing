@@ -9,6 +9,8 @@ from sqlalchemy.orm import Session
 from services import create_event
 from  schema import Event as EventSchema
 from datetime import datetime
+from elasticsearch import Elasticsearch
+
 
 ROUTING_EXCHANGE = os.environ.get("ROUTING_EXCHANGE", "routing")
 ROUTING_ROUTING_KEY = os.environ.get("ROUTING_ROUTING_KEY", "routing")
@@ -49,15 +51,15 @@ async def on_message_route_it(channel: Channel, exchange: Exchange, message: Inc
             await exchange.publish(routing_message, routing_key=recipient_queue_name)
             print(f"Successfully publish message to {recipient_queue_name}")
 
-async def on_message(channel: Channel, exchange: Exchange, db: Session, message: IncomingMessage,):
+async def on_message(channel: Channel, exchange: Exchange, elastic_client: Elasticsearch, message: IncomingMessage,):
     routed_at = datetime.now()
     await on_message_print(message)
     try:
         await on_message_route_it(channel=channel, exchange=exchange, message=message)
-        create_event(db=db, event=EventSchema(raw=message.body.decode(), status="success", routed_at=routed_at))
+        create_event(elastic_client=elastic_client, event=EventSchema(raw=message.body.decode(), status="success", routed_at=routed_at))
     except Exception as e:
         print(f"Failed to execute on message because of {e}")
-        create_event(db=db, event=EventSchema(raw=message.body.decode(), status="failed", routed_at=routed_at, reason=str(e)))
+        create_event(elastic_client=elastic_client, event=EventSchema(raw=message.body.decode(), status="failed", routed_at=routed_at, reason=str(e)))
     finally:
         await message.ack()
     

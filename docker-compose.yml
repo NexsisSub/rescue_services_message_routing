@@ -27,8 +27,13 @@ services:
         - 15672:15672
       networks: ["sgenet"]
 
+####################################
+# ELK Stack
+####################################
+
+
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.13.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.0
     container_name: sge_elastic
     environment:
       - discovery.type=single-node
@@ -46,11 +51,19 @@ services:
     image: docker.elastic.co/kibana/kibana:7.14.0
     environment:
       ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
-
-      - ELASTICSEARCH_HOSTS='["elasticsearch:9200"]'
     networks: ["sgenet"]
     ports:
       - 5601:5601
+
+  # logstash:
+  #   image: docker.elastic.co/logstash/logstash:7.14.0
+  #   environment:
+  #     ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
+  #   networks: ["sgenet"]
+  #   ports:
+  #     - 5000:5000
+  #   volumes:
+  #     - ./logstash/pipeline/:/usr/share/logstash/pipeline/
 
 
 ####################################

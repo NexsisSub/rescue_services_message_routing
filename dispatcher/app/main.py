@@ -7,13 +7,12 @@ from runner import on_message, configure_routing_exchange
 from aio_pika import connect
 from functools import partial
 from starlette_exporter import PrometheusMiddleware, handle_metrics
-from database import SessionLocal
-from models import Base
-from database import engine
+from elasticsearch import Elasticsearch
 
 
 AMQP_URI = os.environ.get("AMQP_URI",  "amqp://guest:guest@rabbitmq:5672/")
 DISTRIBUTION_QUEUE = os.environ.get("DISTRIBUTION_QUEUE", "distribution")
+ELASTIC_URI = os.environ.get("ELASTIC_URI",  "0.0.0.0:9200")
 
 
 app = FastAPI(
@@ -26,16 +25,14 @@ app.add_middleware(PrometheusMiddleware)
 app.add_route("/metrics", handle_metrics)
 
 
-Base.metadata.create_all(bind=engine)
-
 async def main():
     connection = await connect(AMQP_URI)
     channel = await connection.channel()
     await channel.set_qos(prefetch_count=1)
     queue = await channel.declare_queue(DISTRIBUTION_QUEUE, durable=True)
     routing_exchange = await configure_routing_exchange(channel)
-    db = SessionLocal()
-    await queue.consume(partial(on_message, channel, routing_exchange, db))
+    es_client = Elasticsearch(ELASTIC_URI, timeout=60)
+    await queue.consume(partial(on_message, channel, routing_exchange, es_client))
 
 
 @app.on_event("startup")

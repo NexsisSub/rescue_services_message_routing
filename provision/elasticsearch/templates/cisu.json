@@ -1,0 +1,563 @@
+{
+    "index_patterns": ["routing-cisu-*"],
+    "template":{
+    "mappings": {
+        "properties": {
+          "edxlDistribution": {
+            "properties": {
+              "@xlink:type": {
+                "type": "text",
+                "fields": {
+                  "keyword": {
+                    "type": "keyword",
+                    "ignore_above": 256
+                  }
+                }
+              },
+              "@xmlns": {
+                "type": "text",
+                "fields": {
+                  "keyword": {
+                    "type": "keyword",
+                    "ignore_above": 256
+                  }
+                }
+              },
+              "@xmlns:ct": {
+                "type": "text",
+                "fields": {
+                  "keyword": {
+                    "type": "keyword",
+                    "ignore_above": 256
+                  }
+                }
+              },
+              "@xmlns:xlink": {
+                "type": "text",
+                "fields": {
+                  "keyword": {
+                    "type": "keyword",
+                    "ignore_above": 256
+                  }
+                }
+              },
+              "content": {
+                "properties": {
+                  "@xlink:type": {
+                    "type": "text",
+                    "fields": {
+                      "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                      }
+                    }
+                  },
+                  "contentObject": {
+                    "properties": {
+                      "@xlink:type": {
+                        "type": "text",
+                        "fields": {
+                          "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                          }
+                        }
+                      },
+                      "contentXML": {
+                        "properties": {
+                          "embeddedXMLContent": {
+                            "properties": {
+                              "message": {
+                                "properties": {
+                                  "@xmlns": {
+                                    "type": "text",
+                                    "fields": {
+                                      "keyword": {
+                                        "type": "keyword",
+                                        "ignore_above": 256
+                                      }
+                                    }
+                                  },
+                                  "createEvent": {
+                                    "properties": {
+                                      "createdAt": {
+                                        "type": "date"
+                                      },
+                                      "eventId": {
+                                        "type": "text",
+                                        "fields": {
+                                          "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                          }
+                                        }
+                                      },
+                                      "eventLocation": {
+                                        "properties": {
+                                          "address": {
+                                            "type": "text",
+                                            "fields": {
+                                              "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                              }
+                                            }
+                                          },
+                                          "coord": {
+                                            "type": "geo_point"
+                                          },
+                                          "coordsys": {
+                                            "type": "text",
+                                            "fields": {
+                                              "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                              }
+                                            }
+                                          },
+                                          "height_role": {
+                                            "type": "text",
+                                            "fields": {
+                                              "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                              }
+                                            }
+                                          },
+                                          "loc_Id": {
+                                            "type": "text",
+                                            "fields": {
+                                              "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                              }
+                                            }
+                                          },
+                                          "type": {
+                                            "type": "text",
+                                            "fields": {
+                                              "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "primaryAlert": {
+                                        "properties": {
+                                          "alertCode": {
+                                            "properties": {
+                                              "healthMotive": {
+                                                "properties": {
+                                                  "code": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                      "keyword": {
+                                                        "type": "keyword",
+                                                        "ignore_above": 256
+                                                      }
+                                                    }
+                                                  },
+                                                  "label": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                      "keyword": {
+                                                        "type": "keyword",
+                                                        "ignore_above": 256
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "locationKind": {
+                                                "properties": {
+                                                  "code": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                      "keyword": {
+                                                        "type": "keyword",
+                                                        "ignore_above": 256
+                                                      }
+                                                    }
+                                                  },
+                                                  "label": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                      "keyword": {
+                                                        "type": "keyword",
+                                                        "ignore_above": 256
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "riskThreat": {
+                                                "properties": {
+                                                  "code": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                      "keyword": {
+                                                        "type": "keyword",
+                                                        "ignore_above": 256
+                                                      }
+                                                    }
+                                                  },
+                                                  "label": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                      "keyword": {
+                                                        "type": "keyword",
+                                                        "ignore_above": 256
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "version": {
+                                                "type": "text",
+                                                "fields": {
+                                                  "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                  }
+                                                }
+                                              },
+                                              "victims": {
+                                                "properties": {
+                                                  "comment": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                      "keyword": {
+                                                        "type": "keyword",
+                                                        "ignore_above": 256
+                                                      }
+                                                    }
+                                                  },
+                                                  "count": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                      "keyword": {
+                                                        "type": "keyword",
+                                                        "ignore_above": 256
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "whatsHappen": {
+                                                "properties": {
+                                                  "code": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                      "keyword": {
+                                                        "type": "keyword",
+                                                        "ignore_above": 256
+                                                      }
+                                                    }
+                                                  },
+                                                  "comment": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                      "keyword": {
+                                                        "type": "keyword",
+                                                        "ignore_above": 256
+                                                      }
+                                                    }
+                                                  },
+                                                  "label": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                      "keyword": {
+                                                        "type": "keyword",
+                                                        "ignore_above": 256
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "alertId": {
+                                            "type": "text",
+                                            "fields": {
+                                              "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                              }
+                                            }
+                                          },
+                                          "alertLocation": {
+                                            "properties": {
+                                              "address": {
+                                                "type": "text",
+                                                "fields": {
+                                                  "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                  }
+                                                }
+                                              },
+                                              "coord": {
+                                                  "type": "geo_point"
+                                              },
+                                              "coordsys": {
+                                                "type": "text",
+                                                "fields": {
+                                                  "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                  }
+                                                }
+                                              },
+                                              "type": {
+                                                "type": "text",
+                                                "fields": {
+                                                  "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "call": {
+                                            "properties": {
+                                              "dialledURI": {
+                                                "type": "text",
+                                                "fields": {
+                                                  "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                  }
+                                                }
+                                              },
+                                              "source": {
+                                                "type": "text",
+                                                "fields": {
+                                                  "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "caller": {
+                                            "properties": {
+                                              "callerURI": {
+                                                "type": "text",
+                                                "fields": {
+                                                  "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "receivedAt": {
+                                            "type": "date"
+                                          },
+                                          "reporting": {
+                                            "type": "text",
+                                            "fields": {
+                                              "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "severity": {
+                                        "type": "text",
+                                        "fields": {
+                                          "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "messageId": {
+                                    "type": "text",
+                                    "fields": {
+                                      "keyword": {
+                                        "type": "keyword",
+                                        "ignore_above": 256
+                                      }
+                                    }
+                                  },
+                                  "msgType": {
+                                    "type": "text",
+                                    "fields": {
+                                      "keyword": {
+                                        "type": "keyword",
+                                        "ignore_above": 256
+                                      }
+                                    }
+                                  },
+                                  "recipients": {
+                                    "properties": {
+                                      "recipient": {
+                                        "properties": {
+                                          "URI": {
+                                            "type": "text",
+                                            "fields": {
+                                              "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                              }
+                                            }
+                                          },
+                                          "name": {
+                                            "type": "text",
+                                            "fields": {
+                                              "keyword": {
+                                                "type": "keyword",
+                                                "ignore_above": 256
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "sender": {
+                                    "properties": {
+                                      "URI": {
+                                        "type": "text",
+                                        "fields": {
+                                          "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                          }
+                                        }
+                                      },
+                                      "name": {
+                                        "type": "text",
+                                        "fields": {
+                                          "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "sentAt": {
+                                    "type": "date"
+                                  },
+                                  "status": {
+                                    "type": "text",
+                                    "fields": {
+                                      "keyword": {
+                                        "type": "keyword",
+                                        "ignore_above": 256
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "dateTimeExpires": {
+                "type": "date"
+              },
+              "dateTimeSent": {
+                "type": "date"
+              },
+              "descriptor": {
+                "properties": {
+                  "@xlink:type": {
+                    "type": "text",
+                    "fields": {
+                      "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                      }
+                    }
+                  },
+                  "explicitAddress": {
+                    "properties": {
+                      "explicitAddressScheme": {
+                        "type": "text",
+                        "fields": {
+                          "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                          }
+                        }
+                      },
+                      "explicitAddressValue": {
+                        "type": "text",
+                        "fields": {
+                          "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "language": {
+                    "type": "text",
+                    "fields": {
+                      "keyword": {
+                        "type": "keyword",
+                        "ignore_above": 256
+                      }
+                    }
+                  }
+                }
+              },
+              "distributionID": {
+                "type": "text",
+                "fields": {
+                  "keyword": {
+                    "type": "keyword",
+                    "ignore_above": 256
+                  }
+                }
+              },
+              "distributionKind": {
+                "type": "text",
+                "fields": {
+                  "keyword": {
+                    "type": "keyword",
+                    "ignore_above": 256
+                  }
+                }
+              },
+              "distributionStatus": {
+                "type": "text",
+                "fields": {
+                  "keyword": {
+                    "type": "keyword",
+                    "ignore_above": 256
+                  }
+                }
+              },
+              "senderID": {
+                "type": "text",
+                "fields": {
+                  "keyword": {
+                    "type": "keyword",
+                    "ignore_above": 256
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }  
+  }

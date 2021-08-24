@@ -1,14 +1,12 @@
-from sqlalchemy.orm import Session
-
-from models import Event as EventModel
 from schema import Event as EventSchema
+from elasticsearch import Elasticsearch
+from datetime import datetime 
 
-def create_event(db: Session, event: EventSchema):
+def create_event(elastic_client: Elasticsearch, event: EventSchema):
     print("Start creating event")
-    user = EventModel(id=event.id, created_at=event.created_at, 
-        raw=event.raw, status=event.status,
-         routed_at=event.routed_at, reason=event.reason)
-    db.add(user)
-    db.commit()
-    db.refresh(user)
-    return user
+    elastic_client.index(
+        index=f"log-dispatcher-{datetime.today().strftime('%Y-%m-%d')}", 
+        id=event.id, 
+        body=event.json()
+    )
+    return event
