@@ -14,7 +14,7 @@ ERRORS_EXCHANGE  = os.environ.get("ERRORS_EXCHANGE")
 
 
 async def on_message_print(message: IncomingMessage):
-    print(f"[->] Received error message dlx data from {message.routing_key}")
+    print(f"[->] Received error message dlx data from queue : {message.routing_key}")
 
 async def on_message_route_it_to_client_error_queue(channel: Channel, exchange: Exchange, message: IncomingMessage):
     edxl_xml_string = message.body.decode()
@@ -23,11 +23,11 @@ async def on_message_route_it_to_client_error_queue(channel: Channel, exchange: 
     receiver: str = message.headers["receiver"]
     messageID: str = message.headers["messageID"]
 
-
     message_content = json.dumps({
+        #"message_data":message.body.decode(),
         "cause":{"code":"CONFLIT"},
         "idCorrelationMessage":messageID
-    }).encode()
+        }).encode()
 
     message_content = build_error_message(
         sender_id=receiver,
@@ -35,15 +35,18 @@ async def on_message_route_it_to_client_error_queue(channel: Channel, exchange: 
         content=base64.b64encode(message_content).decode()
     )
 
+    distribution_id = str(uuid4())
     error_message = Message(
         message_content.encode(),
         delivery_mode=DeliveryMode.PERSISTENT,
         expiration=None,
         headers={
-            "receiver":sender,
-            "sender":receiver
-        }
+                "distribution_id":distribution_id,
+                "receiver":sender,
+                "sender": receiver,
+            }
     )
+
     recipient_queue_name = f"messaging.{sender}.errors"
     queue = await channel.declare_queue(recipient_queue_name, durable=True)
     await queue.bind(exchange, routing_key=recipient_queue_name)
@@ -62,13 +65,14 @@ async def on_message(channel: Channel, exchange: Exchange, message: IncomingMess
         await message.ack()
         print("Succesffully Acked message")
 
-def build_error_message(sender_id: str, receiver_id: str, content: str):
+def build_error_message(sender_id: str, receiver_id: str, content: str, distribution_id: str):
     template = env.get_template('error.xml')
     output = template.render(
         sender_id=sender_id, 
         receiver_id=receiver_id,
-        distributionID=str(uuid4()),
+        distributionID=distribution_id,
         content=content)
+        
     return output
 
 
