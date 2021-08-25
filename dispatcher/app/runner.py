@@ -5,7 +5,6 @@ import os
 from functools import partial
 from parser import get_recipients_and_protocol_from_edxl_string, get_distribution_and_message_id
 import time
-from sqlalchemy.orm import Session
 from services import create_event
 from  schema import Event as EventSchema
 from datetime import datetime

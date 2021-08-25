@@ -1,6 +1,6 @@
 aio_pika
 starlette_exporter
-sqlalchemy
 pydantic
-psycopg2
 elasticsearch[async]
+python-json-logger
+loguru
