@@ -18,7 +18,7 @@ class Recipient:
     @classmethod
     def from_xml(cls, xml):
         explicitAddressScheme = get_data_from_tag_name(xml, "explicitAddressScheme")
-        explicitAddressValue= get_data_from_tag_name(xml, "explicitAddressValue")
+        explicitAddressValue = get_data_from_tag_name(xml, "explicitAddressValue")
         return cls(scheme= explicitAddressScheme, address=explicitAddressValue)
 
 def get_data_from_tag_name(xml, tag, class_mapping=str, index=0):
@@ -51,6 +51,7 @@ def get_distribution_and_message_id(xml_string):
     distributionID = get_data_from_tag_name(dom,"distributionID")
     messageID = get_data_from_tag_name(dom, "messageId")
     return distributionID, messageID
+
 
 def get_protocol_from_xml(xml):
     try:
