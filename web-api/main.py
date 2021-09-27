@@ -45,7 +45,7 @@ async def make_app():
     distribution_queue = await channel.declare_queue(DISTRIBUTION_QUEUE, durable=True)
 
     return tornado.web.Application(
-        [(r"/publish", PublisherHandler)],
+        [(r"/messages", PublisherHandler)],
         amqp_connection=amqp_connection,
     )
 
