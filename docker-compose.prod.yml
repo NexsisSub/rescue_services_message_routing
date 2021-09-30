@@ -204,6 +204,13 @@ services:
         - /var/run/docker.sock:/var/run/docker.sock:ro
     networks: ["sgenet"]
     
+
+volumes:
+  acme:
+  html:
+  certs:
+  vhost:
+  
 networks:
   sgenet:
     name: sgenet
