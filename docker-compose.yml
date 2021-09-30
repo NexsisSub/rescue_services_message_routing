@@ -167,37 +167,6 @@ services:
         - "8443:8891"
     networks: ["sgenet"]
 
-####################################
-
-####################################
-# Certificates Companion
-  nginx-proxy:
-    image: nginxproxy/nginx-proxy
-    environment: 
-        - HTTP_PORT=8890
-        - HTTPS_PORT=8891
-
-    volumes:
-        - certs:/etc/nginx/certs
-        - vhost:/etc/nginx/vhost.d
-        - html:/usr/share/nginx/html
-        - /var/run/docker.sock:/tmp/docker.sock:ro
-    ports:
-        - "80:80"
-        - "443:443"
-    networks: ["sgenet"]
-
-  nginx-proxy-acme:
-    image: nginxproxy/acme-companion
-    environment: 
-        - DEFAULT_EMAIL=r.courivaud@gmail.com
-    volumes:
-        - certs:/etc/nginx/certs
-        - vhost:/etc/nginx/vhost.d
-        - html:/usr/share/nginx/html
-        - acme:/etc/acme.sh
-        - /var/run/docker.sock:/var/run/docker.sock:ro
-    networks: ["sgenet"]
     
 networks:
   sgenet:
