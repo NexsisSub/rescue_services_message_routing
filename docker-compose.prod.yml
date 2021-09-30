@@ -135,6 +135,11 @@ services:
       - .env
     ports:
       - 8888:8888
+    environment: 
+        - VIRTUAL_HOST=sge.scw.ansc.fr
+        - VIRTUAL_PORT=8888
+        - LETSENCRYPT_HOST=sge.scw.ansc.fr
+        - LETSENCRYPT_EMAIL=r.courivaud@gmail.com
     command : /scripts/wait-for-it.sh ${AMQP_HOST} -s --timeout=30  -- python main.py
 #Sortie  
   http-worker:
