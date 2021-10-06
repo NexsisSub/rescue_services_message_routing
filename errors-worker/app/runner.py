@@ -6,8 +6,10 @@ from functools import partial
 from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
 import base64
+import json
+from uuid import uuid4
 
-content = 'This is about page'
+
 env = Environment(loader=FileSystemLoader('templates'))
 
 ERRORS_EXCHANGE  = os.environ.get("ERRORS_EXCHANGE")
@@ -29,13 +31,15 @@ async def on_message_route_it_to_client_error_queue(channel: Channel, exchange: 
         "idCorrelationMessage":messageID
         }).encode()
 
+    distribution_id = str(uuid4())
+
     message_content = build_error_message(
         sender_id=receiver,
         receiver_id=sender,
+        distribution_id=distribution_id,
         content=base64.b64encode(message_content).decode()
     )
 
-    distribution_id = str(uuid4())
     error_message = Message(
         message_content.encode(),
         delivery_mode=DeliveryMode.PERSISTENT,
